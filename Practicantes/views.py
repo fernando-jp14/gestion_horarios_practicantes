@@ -7,3 +7,4 @@ from .serializers import PracticanteSerializer
 class PracticanteViewSet(viewsets.ModelViewSet):
     queryset = Practicante.objects.all()
     serializer_class = PracticanteSerializer
+
