@@ -28,7 +28,7 @@ async function loadProfile() {
       const user = data.user;
 
       // Actualizar bienvenida
-      welcomeUser.textContent = `Hola, ${user.username}`;
+      welcomeUser.textContent = `${user.username} • Admin`;
 
       // Mostrar información del perfil
       profileContent.innerHTML = `
