@@ -3,10 +3,10 @@ from openpyxl.styles import Font, Alignment, PatternFill, Border, Side
 from openpyxl.utils import get_column_letter
 from io import BytesIO
 
-def export_horarios_to_excel(queryset):
+def export_niveles_habilidad_to_excel(queryset):
     wb = openpyxl.Workbook()
     ws = wb.active
-    ws.title = "Horarios de Recuperación"
+    ws.title = "Niveles de Habilidades"
 
     # Estilos
     header_font = Font(bold=True, color="FFFFFF")
@@ -22,7 +22,7 @@ def export_horarios_to_excel(queryset):
     )
 
     # Encabezados
-    headers = ['Practicante', 'Días de Falta', 'Días de Recuperación']
+    headers = ['Practicante', 'Habilidad', 'Puntaje']
     ws.append(headers)
 
     for col_num, header in enumerate(headers, 1):
@@ -33,17 +33,19 @@ def export_horarios_to_excel(queryset):
         cell.border = thin_border
 
     # Datos
-    for row_idx, horario in enumerate(queryset, start=2):
-        dias_falta = ', '.join([d.nombre for d in horario.dias_falta.all()])
-        dias_recuperacion = ', '.join([d.nombre for d in horario.dias_recuperacion.all()])
-        row_data = [str(horario.practicante), dias_falta, dias_recuperacion]
+    for row_idx, nivel in enumerate(queryset, start=2):
+        row_data = [
+            str(nivel.practicante),
+            str(nivel.habilidad),
+            nivel.puntaje
+        ]
 
         for col_idx, value in enumerate(row_data, start=1):
             cell = ws.cell(row=row_idx, column=col_idx, value=value)
             cell.alignment = alignment_left
             cell.border = thin_border
 
-    # Ajustar ancho columnas
+    # Ajustar ancho de columnas
     for col_idx, col_cells in enumerate(ws.columns, 1):
         max_length = max(len(str(cell.value)) if cell.value else 0 for cell in col_cells)
         adjusted_width = max_length + 4

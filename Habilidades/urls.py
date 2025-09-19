@@ -9,3 +9,6 @@ router.register(r'niveles-habilidad', NivelHabilidadViewSet)
 urlpatterns = [
     path('', include(router.urls)),
 ]
+
+# Probar exportación a Excel
+# http://localhost:8000/api/niveles-habilidad/exportar-excel/
