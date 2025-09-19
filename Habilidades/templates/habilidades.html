@@ -1,0 +1,132 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="{% static 'habilidades.css' %}">
+  <title>Gestión de Habilidades</title>
+</head>
+<body>
+  <div class="dashboard-layout">
+    <!-- Menú lateral -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="logo"></div>
+        <span class="brand">Reflexo</span>
+        <span class="subtitle">Horarios & Habilidades</span>
+      </div>
+      <nav class="sidebar-nav">
+        <ul>
+          <li><a href="#"><span>📅</span> Horarios (Todos)</a></li>
+          <li><a href="/practicantes"><span>👥</span> Practicantes</a></li>
+          <li><a href="#" class="active"><span>🧠</span> Habilidades</a></li>
+          <li><a href="#"><span>👥</span> Generar equipos</a></li>
+          <li><a href="#"><span>📤</span> Exportar</a></li>
+        </ul>
+      </nav>
+    </aside>
+    
+    <main class="main-content">
+      <!-- Barra superior -->
+      <nav class="navbar dark">
+        <h1>Gestión de Habilidades</h1>
+        <div class="user-info">
+          <span id="welcomeUser">Administrador</span>
+          <button class="logout-btn" id="logoutBtn">Cerrar Sesión</button>
+        </div>
+      </nav>
+      
+      <!-- Contenido principal -->
+      <div class="content-container">
+        <!-- Panel de acciones -->
+        <div class="action-panel">
+          <button class="btn-primary" id="addHabilidadBtn">+ Añadir Habilidad</button>
+          <div class="view-toggle">
+            <button class="toggle-btn active" data-view="practicantes">Vista por Practicantes</button>
+            <button class="toggle-btn" data-view="habilidades">Vista por Habilidades</button>
+          </div>
+        </div>
+        
+        <!-- Modal para añadir/editar habilidad -->
+        <div id="habilidadModal" class="modal">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h2 id="modalTitle">Añadir Habilidad</h2>
+              <span class="close">&times;</span>
+            </div>
+            <form id="habilidadForm">
+              <input type="hidden" id="habilidadId">
+              <div class="form-group">
+                <label for="practicante">Practicante:</label>
+                <select id="practicante" required>
+                  <option value="">Seleccionar practicante</option>
+                  <!-- Los practicantes se cargarán dinámicamente -->
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="habilidad">Habilidad:</label>
+                <select id="habilidad" required>
+                  <option value="">Seleccionar habilidad</option>
+                  <option value="1">JavaScript</option>
+                  <option value="2">React</option>
+                  <option value="3">Figma</option>
+                  <option value="4">Python</option>
+                  <option value="5">Django</option>
+                  <option value="6">Docker</option>
+                  <option value="7">MySQL</option>
+                  <option value="8">PHP</option>
+                  <option value="9">Laravel</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="puntaje">Puntaje (1-10):</label>
+                <input type="number" id="puntaje" min="1" max="10" required>
+              </div>
+              <div class="form-actions">
+                <button type="submit" class="btn-primary">Guardar</button>
+                <button type="button" class="btn-secondary" id="cancelBtn">Cancelar</button>
+              </div>
+            </form>
+          </div>
+        </div>
+        
+        <!-- Vista por practicantes -->
+        <div id="practicantesView" class="view-content active">
+          <div class="practicantes-container">
+            <!-- Los practicantes se cargarán dinámicamente -->
+          </div>
+        </div>
+        
+        <!-- Vista por habilidades -->
+        <div id="habilidadesView" class="view-content">
+          <div class="table-container">
+            <table id="habilidadesTable">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Practicante</th>
+                  <th>Habilidad</th>
+                  <th>Puntaje</th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>
+              <tbody id="habilidadesTableBody">
+                <!-- Los datos se cargarán dinámicamente -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+        
+        <!-- Mensaje de carga/error -->
+        <div id="messageContainer">
+          <div id="loadingMessage" class="loading">Cargando habilidades...</div>
+          <div id="errorMessage" class="error" style="display: none;"></div>
+        </div>
+      </div>
+    </main>
+  </div>
+  
+  <script src="{% static 'habilidades.js' %}"></script>
+</body>
+</html>
