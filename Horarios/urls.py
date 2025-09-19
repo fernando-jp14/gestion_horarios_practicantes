@@ -8,3 +8,6 @@ router.register(r'horarios-recuperacion', HorarioRecuperacionViewSet, basename='
 urlpatterns = [
 	path('', include(router.urls)),
 ]
+
+# Probar exportación a Excel
+# http://localhost:8000/api/horarios-recuperacion/exportar-excel/
