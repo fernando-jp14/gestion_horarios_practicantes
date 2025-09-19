@@ -85,17 +85,22 @@ from dotenv import load_dotenv
 load_dotenv()
 
 DATABASES = {
+#   'default': {
+#        'ENGINE': 'django.db.backends.mysql',
+#        'NAME': 'horarios_db', #nombre de la base de datos
+#        'USER': 'root',
+#        'PASSWORD': os.getenv('DB_PASSWORD', ''),  # Lee la variable del entorno(crear archivo .env en #la raiz del proyecto ejm: DB_PASSWORD=tu_contraseña)
+#        'HOST': 'localhost',
+#        'PORT': '3306',
+#        'OPTIONS': {
+#            'charset': 'utf8mb4',
+#            'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
+#        },
+#   }
+#}
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'horarios_db', #nombre de la base de datos
-        'USER': 'root',
-        'PASSWORD': os.getenv('DB_PASSWORD', ''),  # Lee la variable del entorno(crear archivo .env en la raiz del proyecto ejm: DB_PASSWORD=tu_contraseña)
-        'HOST': 'localhost',
-        'PORT': '3306',
-        'OPTIONS': {
-            'charset': 'utf8mb4',
-            'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
-        },
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
 
