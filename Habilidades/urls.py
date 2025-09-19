@@ -11,3 +11,6 @@ urlpatterns = [
     path('', include(router.urls)),
     path('habilidades_template/', habilidades_template, name='habilidades_template'),
 ]
+
+# Probar exportación a Excel
+# http://localhost:8000/api/niveles-habilidad/exportar-excel/

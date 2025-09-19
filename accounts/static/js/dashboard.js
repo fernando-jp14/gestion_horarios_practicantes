@@ -101,5 +101,49 @@ document.addEventListener("click", function(event) {
 document.getElementById("logoutBtn").addEventListener("click", logout);
 userDropdownToggle.addEventListener("click", toggleProfileDropdown);
 
+
+// --- Lógica para exportar Excel de horarios de recuperación ---
+// Busca el botón y agrega el event listener para descargar el Excel autenticado
+document.addEventListener('DOMContentLoaded', function() {
+  const exportBtn = document.getElementById('exportarExcelBtn');
+  if (exportBtn) {
+    exportBtn.addEventListener('click', function() {
+      // Recupera el token de autenticación desde localStorage
+      const token = localStorage.getItem('token');
+      if (!token) {
+        alert('No hay token de autenticación. Inicia sesión primero.');
+        return;
+      }
+      // Realiza la petición fetch al endpoint protegido
+      fetch(`${API_BASE}/api/horarios-recuperacion/exportar-excel/`, {
+        method: 'GET',
+        headers: {
+          'Authorization': `Token ${token}`
+        }
+      })
+      .then(response => {
+        // Si la respuesta no es exitosa, lanza error
+        if (!response.ok) throw new Error('Error al descargar el archivo');
+        return response.blob();
+      })
+      .then(blob => {
+        // Crea un enlace temporal para descargar el archivo
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'horarios_recuperacion.xlsx';
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        window.URL.revokeObjectURL(url);
+      })
+      .catch(error => {
+        // Muestra el error en un alert
+        alert(error);
+      });
+    });
+  }
+});
+
 // Cargar perfil al iniciar
 loadProfile();
