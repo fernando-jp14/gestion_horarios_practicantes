@@ -31,15 +31,15 @@
     <main class="main-content">
       <!-- Barra superior -->
       <nav class="navbar dark">
-        <h1>Mi Perfil</h1>
+        <h1>Dashboard</h1>
         <div class="user-info">
           <!-- Botón de usuario que despliega el perfil -->
           <div class="user-dropdown">
             <span id="welcomeUser" class="user-dropdown-toggle">Cargando...</span>
             <div id="profileDropdown" class="profile-dropdown">
-                <!-- La tarjeta de perfil solo se muestra en el menú desplegable -->
-              <div class="main-card perfil-card">
-                <h2>Mi Perfil</h2>
+              <!-- Contenido del menú desplegable -->
+              <div class="profile-dropdown-content">
+                <h3>Mi Perfil</h3>
                 <div id="profileContent" class="loading">
                   Cargando información del perfil...
                 </div>
@@ -49,6 +49,14 @@
           <button class="logout-btn" id="logoutBtn">Cerrar Sesión</button>
         </div>
       </nav>
+      
+      <!-- Contenido principal -->
+      <div class="dashboard-content">
+        <div class="main-card">
+          <h2>Bienvenido al Dashboard</h2>
+          <p>Selecciona una opción del menú lateral para comenzar.</p>
+        </div>
+      </div>
     </main>
   </div>
   <script src="{% static 'js/dashboard.js' %}"></script>

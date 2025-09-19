@@ -6,6 +6,10 @@ if (!token) {
   window.location.href = "/";
 }
 
+// Elementos del DOM
+const profileDropdown = document.getElementById("profileDropdown");
+const userDropdownToggle = document.getElementById("welcomeUser");
+
 // Cargar perfil al iniciar
 async function loadProfile() {
   const profileContent = document.getElementById("profileContent");
@@ -28,23 +32,21 @@ async function loadProfile() {
 
       // Mostrar información del perfil
       profileContent.innerHTML = `
-                        <div class="profile-info">
-                            <div class="info-item">
-                                <span class="info-label">ID de Usuario:</span>
-                                <span class="info-value">${user.id}</span>
-                            </div>
-                            <div class="info-item">
-                                <span class="info-label">Nombre de Usuario:</span>
-                                <span class="info-value">${user.username}</span>
-                            </div>
-                            <div class="info-item">
-                                <span class="info-label">Email:</span>
-                                <span class="info-value">${
-                                  user.email || "No especificado"
-                                }</span>
-                            </div>
-                        </div>
-                    `;
+        <div class="profile-info">
+          <div class="info-item">
+            <span class="info-label">ID de Usuario:</span>
+            <span class="info-value">${user.id}</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">Nombre de Usuario:</span>
+            <span class="info-value">${user.username}</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">Email:</span>
+            <span class="info-value">${user.email || "No especificado"}</span>
+          </div>
+        </div>
+      `;
     } else if (response.status === 401) {
       // Token inválido, redirigir al login
       localStorage.clear();
@@ -54,10 +56,10 @@ async function loadProfile() {
     }
   } catch (error) {
     profileContent.innerHTML = `
-                    <div class="error">
-                        Error al cargar la información del perfil
-                    </div>
-                `;
+      <div class="error">
+        Error al cargar la información del perfil
+      </div>
+    `;
   }
 }
 
@@ -80,8 +82,24 @@ async function logout() {
   }
 }
 
+// Alternar la visualización del menú desplegable
+function toggleProfileDropdown() {
+  profileDropdown.classList.toggle("active");
+}
+
+// Cerrar el menú desplegable al hacer clic fuera de él
+document.addEventListener("click", function(event) {
+  const isClickInsideDropdown = profileDropdown.contains(event.target);
+  const isClickOnToggle = userDropdownToggle.contains(event.target);
+  
+  if (!isClickInsideDropdown && !isClickOnToggle && profileDropdown.classList.contains("active")) {
+    profileDropdown.classList.remove("active");
+  }
+});
+
 // Event listeners
 document.getElementById("logoutBtn").addEventListener("click", logout);
+userDropdownToggle.addEventListener("click", toggleProfileDropdown);
 
 // Cargar perfil al iniciar
 loadProfile();
