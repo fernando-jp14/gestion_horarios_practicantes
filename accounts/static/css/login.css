@@ -1,0 +1,129 @@
+    body {
+      font-family: Arial, sans-serif;
+      background: #0f111a;
+      color: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      overflow: hidden;
+    }
+
+    /* ====== Contenedor ====== */
+    .container {
+      background: #1c1f2b;
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+      width: 350px;
+      animation: pulseContainer 3s infinite alternate;
+    }
+
+    /* Animación de brillo del contenedor */
+    @keyframes pulseContainer {
+      0% {
+        box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+      }
+
+      100% {
+        box-shadow: 0 0 30px #34db8d;
+      }
+    }
+
+    h2 {
+      margin-bottom: 20px;
+      text-align: center;
+      color: #e0e0e0;
+      animation: glowText 2s infinite alternate;
+    }
+
+    /* Animación texto */
+    @keyframes glowText {
+      0% {
+        text-shadow: 0 0 5px #3498db;
+      }
+
+      100% {
+        text-shadow: 0 0 15px #27ae60;
+      }
+    }
+
+    .form-group {
+      margin-bottom: 15px;
+    }
+
+    label {
+      display: block;
+      margin: 10px 0 5px;
+      font-size: 14px;
+      color: #bbb;
+    }
+
+    /* ====== Inputs con animación ====== */
+    input {
+      width: 100%;
+      padding: 10px;
+      border: none;
+      border-radius: 8px;
+      margin-bottom: 15px;
+      background: #2a2d3a;
+      color: #fff;
+      transition: all 0.3s ease;
+      box-sizing: border-box;
+    }
+
+    input:focus {
+      outline: none;
+      box-shadow: 0 0 15px #34db8d, 0 0 25px #34db8d inset;
+      transform: scale(1.05);
+    }
+
+    /* ====== Botones ====== */
+    button {
+      width: 100%;
+      padding: 12px;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: all 0.4s ease;
+      background: #27ae60;
+      color: white;
+      box-shadow: 0 0 10px #27ae60;
+    }
+
+    button:hover {
+      background: #219150;
+      box-shadow: 0 0 20px #27ae60, 0 0 40px #27ae60;
+      transform: translateY(-3px);
+    }
+
+    /* ====== Texto con link ====== */
+    .links {
+      margin-top: 15px;
+      text-align: center;
+      font-size: 14px;
+      color: #aaa;
+      transition: color 0.3s ease;
+    }
+
+    .links a {
+      color: #3498db;
+      text-decoration: none;
+      transition: all 0.3s ease;
+    }
+
+    .links a:hover {
+      text-decoration: underline;
+      text-shadow: 0 0 10px #3498db;
+    }
+
+    /* Estilo para mensajes de error */
+    .error {
+      color: #e74c3c;
+      font-size: 14px;
+      margin-top: 10px;
+      text-align: center;
+      min-height: 20px;
+    }

@@ -1,90 +1,56 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Reflexo • Horarios y Habilidades</title>
-  <link rel="stylesheet" href="dashboard.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+  <title>Dashboard</title>
 </head>
+
 <body>
-  <div class="app">
-    <!-- Sidebar -->
+  <div class="dashboard-layout">
+    <!-- Menú lateral -->
     <aside class="sidebar">
-      <div class="brand">
+      <div class="sidebar-header">
         <div class="logo"></div>
-        <div>
-          <h1>Reflexo</h1>
-          <div class="sub">Horarios & Habilidades</div>
-        </div>
+        <span class="brand">Reflexo</span>
+        <span class="subtitle">Horarios & Habilidades</span>
       </div>
-      <nav class="nav">
-        <a href="#horarios" class="active">🗓️ Horarios (Todos)</a>
-        <a href="#habilidades">🧠 Habilidades</a>
-        <a href="#equipos">👥 Generar equipos</a>
-        <a href="#exportar">📤 Exportar</a>
+      <nav class="sidebar-nav">
+        <ul>
+          <li><a href="#" class="active"><span>📅</span> Horarios (Todos)</a></li>
+          <li><a href="#"><span>🧠</span> Habilidades</a></li>
+          <li><a href="#"><span>👥</span> Generar equipos</a></li>
+          <li><a href="#"><span>📤</span> Exportar</a></li>
+        </ul>
+        <div class="sidebar-note">Maquetación HTML+CSS (sin JS). Los botones son placeholders.</div>
       </nav>
-      <p class="hint">Maquetación HTML+CSS+JS • Datos en memoria</p>
     </aside>
-
-    <!-- Contenido -->
-    <section style="display:flex; flex-direction:column; min-width:0">
-      <header>
-        <div></div>
-        <div class="user">
-          <span style="color:var(--text-2)">Bruno • Admin</span>
-          <div class="avatar"></div>
+    <main class="main-content">
+      <!-- Barra superior -->
+      <nav class="navbar dark">
+        <h1>Mi Perfil</h1>
+        <div class="user-info">
+          <!-- Botón de usuario que despliega el perfil -->
+          <div class="user-dropdown">
+            <span id="welcomeUser" class="user-dropdown-toggle">Cargando...</span>
+            <div id="profileDropdown" class="profile-dropdown">
+                <!-- La tarjeta de perfil solo se muestra en el menú desplegable -->
+              <div class="main-card perfil-card">
+                <h2>Mi Perfil</h2>
+                <div id="profileContent" class="loading">
+                  Cargando información del perfil...
+                </div>
+              </div>
+            </div>
+          </div>
+          <button class="logout-btn" id="logoutBtn">Cerrar Sesión</button>
         </div>
-      </header>
-
-      <main>
-        <!-- Vistas -->
-        <section id="horarios" class="view"></section>
-        <section id="habilidades" class="view"></section>
-        <section id="equipos" class="view"></section>
-        <section id="exportar" class="view"></section>
-      </main>
-    </section>
+      </nav>
+    </main>
   </div>
-
-  <!-- Modales -->
-  <div id="modal-add-horario" class="modal">
-    <div class="modal-card">
-      <div class="modal-header">
-        <h3>Agregar practicante (Horarios)</h3>
-        <a class="close" href="#horarios">✕</a>
-      </div>
-      <form id="form-add-horario" class="form">
-        <div class="row">
-          <div class="col-6">
-            <label>Nombre y Apellido</label>
-            <input id="add-nombre" placeholder="Ej. Ana García" required />
-          </div>
-          <div class="col-3">
-            <label>Equipo</label>
-            <input id="add-equipo" list="teams-list" placeholder="Ej. Sala 3 o MCP" required />
-            <datalist id="teams-list"></datalist>
-          </div>
-          <div class="col-3">
-            <label>Semestre</label>
-            <input id="add-semestre" placeholder="6°" required />
-          </div>
-          <div class="col-6">
-            <label>Días de falta (solo mañana, L–V)</label>
-            <input id="add-faltas" placeholder="Ej. Lun; Vie" />
-          </div>
-          <div class="col-6">
-            <label>Día de recuperación</label>
-            <input id="add-recupera" placeholder="Ej. Mié" />
-          </div>
-        </div>
-        <div class="btns" style="margin-top:10px">
-          <button type="submit" class="btn success">💾 Guardar</button>
-          <a class="btn ghost" href="#horarios">Cancelar</a>
-        </div>
-      </form>
-    </div>
-  </div>
-
-  <script src="dashboard.js"></script>
+  <script src="{% static 'js/dashboard.js' %}"></script>
 </body>
 </html>
