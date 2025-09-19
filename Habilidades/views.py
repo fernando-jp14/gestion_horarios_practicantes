@@ -6,6 +6,8 @@ from .serializers import HabilidadSimpleSerializer, NivelHabilidadSerializer, Pr
 from Practicantes.models import Practicante
 from django.shortcuts import render
 from .utils import export_niveles_habilidad_to_excel
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.decorators import action, permission_classes
 
 class PracticantePuntajeViewSet(viewsets.ModelViewSet):
     queryset = Practicante.objects.all()
@@ -22,6 +24,7 @@ class NivelHabilidadViewSet(viewsets.ModelViewSet):
     serializer_class = NivelHabilidadSerializer
 
     @action(detail=False, methods=['get'], url_path='exportar-excel')
+    @permission_classes([IsAuthenticated])
     def exportar_excel(self, request):
         queryset = self.get_queryset()
         excel_file = export_niveles_habilidad_to_excel(queryset)

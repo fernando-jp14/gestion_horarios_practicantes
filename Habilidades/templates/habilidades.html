@@ -1,12 +1,14 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="{% static 'habilidades.css' %}">
   <title>Gestión de Habilidades</title>
 </head>
+
 <body>
   <div class="dashboard-layout">
     <!-- Menú lateral -->
@@ -18,15 +20,15 @@
       </div>
       <nav class="sidebar-nav">
         <ul>
-          <li><a href="#"><span>📅</span> Horarios (Todos)</a></li>
-          <li><a href="/practicantes"><span>👥</span> Practicantes</a></li>
+          <li><a href="/dashboard/"><span>📅</span> Horarios (Todos)</a></li>
+          <li><a href="/api/practicante_template/"><span>👥</span> Practicantes</a></li>
           <li><a href="#" class="active"><span>🧠</span> Habilidades</a></li>
           <li><a href="#"><span>👥</span> Generar equipos</a></li>
           <li><a href="#"><span>📤</span> Exportar</a></li>
         </ul>
       </nav>
     </aside>
-    
+
     <main class="main-content">
       <!-- Barra superior -->
       <nav class="navbar dark">
@@ -36,7 +38,19 @@
           <button class="logout-btn" id="logoutBtn">Cerrar Sesión</button>
         </div>
       </nav>
-      
+      <div class="user-dropdown">
+        <span id="welcomeUser" class="user-dropdown-toggle">Cargando...</span>
+        <div id="profileDropdown" class="profile-dropdown">
+          <!-- Contenido del menú desplegable -->
+          <div class="profile-dropdown-content">
+            <h3>Mi Perfil</h3>
+            <div id="profileContent" class="loading">
+              Cargando información del perfil...
+            </div>
+          </div>
+        </div>
+      </div>
+
       <!-- Contenido principal -->
       <div class="content-container">
         <!-- Panel de acciones -->
@@ -47,7 +61,7 @@
             <button class="toggle-btn" data-view="habilidades">Vista por Habilidades</button>
           </div>
         </div>
-        
+
         <!-- Modal para añadir/editar habilidad -->
         <div id="habilidadModal" class="modal">
           <div class="modal-content">
@@ -90,14 +104,14 @@
             </form>
           </div>
         </div>
-        
+
         <!-- Vista por practicantes -->
         <div id="practicantesView" class="view-content active">
           <div class="practicantes-container">
             <!-- Los practicantes se cargarán dinámicamente -->
           </div>
         </div>
-        
+
         <!-- Vista por habilidades -->
         <div id="habilidadesView" class="view-content">
           <div class="table-container">
@@ -117,7 +131,7 @@
             </table>
           </div>
         </div>
-        
+
         <!-- Mensaje de carga/error -->
         <div id="messageContainer">
           <div id="loadingMessage" class="loading">Cargando habilidades...</div>
@@ -126,7 +140,8 @@
       </div>
     </main>
   </div>
-  
+
   <script src="{% static 'habilidades.js' %}"></script>
 </body>
+
 </html>
