@@ -1,7 +1,8 @@
 from rest_framework import viewsets
 from .models import Habilidad, NivelHabilidad
-from .serializers import HabilidadSerializer, NivelHabilidadSerializer, PracticanteSerializer
+from .serializers import HabilidadSimpleSerializer, NivelHabilidadSerializer, PracticanteSerializer
 from Practicantes.models import Practicante
+
 
 class PracticanteViewSet(viewsets.ModelViewSet):
     queryset = Practicante.objects.all()
@@ -10,7 +11,7 @@ class PracticanteViewSet(viewsets.ModelViewSet):
 
 class HabilidadViewSet(viewsets.ModelViewSet):
     queryset = Habilidad.objects.all()
-    serializer_class = HabilidadSerializer
+    serializer_class = HabilidadSimpleSerializer
 
 
 class NivelHabilidadViewSet(viewsets.ModelViewSet):
