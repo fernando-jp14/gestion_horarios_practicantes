@@ -21,8 +21,6 @@ class NivelHabilidadViewSet(viewsets.ModelViewSet):
     queryset = NivelHabilidad.objects.all()
     serializer_class = NivelHabilidadSerializer
 
-def habilidades_template(request):
-    return render(request, 'habilidades.html')
     @action(detail=False, methods=['get'], url_path='exportar-excel')
     def exportar_excel(self, request):
         queryset = self.get_queryset()
@@ -34,3 +32,7 @@ def habilidades_template(request):
         )
         response['Content-Disposition'] = 'attachment; filename=habilidades_practicantes.xlsx'
         return response
+
+def habilidades_template(request):
+    return render(request, 'habilidades.html')
+    
