@@ -1,0 +1,138 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="{% static 'css/practicante.css' %}">
+  <title>Gestión de Practicantes</title>
+</head>
+<body>
+  <div class="dashboard-layout">
+    <!-- Menú lateral -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="logo"></div>
+        <span class="brand">Reflexo</span>
+        <span class="subtitle">Horarios & Habilidades</span>
+      </div>
+      <nav class="sidebar-nav">
+        <ul>
+          <li><a href="/dashboard/"><span>📅</span> Horarios (Todos)</a></li>
+          <li><a href="#" class="active"><span>👥</span> Practicantes</a></li>
+          <li><a href="#"><span>🧠</span> Habilidades</a></li>
+          <li><a href="#"><span>👥</span> Generar equipos</a></li>
+          <li><a href="#"><span>📤</span> Exportar</a></li>
+        </ul>
+      </nav>
+    </aside>
+    
+    <main class="main-content">
+      <!-- Barra superior -->
+      <nav class="navbar dark">
+        <h1>Gestión de Practicantes</h1>
+        <div class="user-info">
+          <span id="welcomeUser">Administrador</span>
+          <button class="logout-btn" id="logoutBtn">Cerrar Sesión</button>
+        </div>
+      </nav>
+      
+      <!-- Contenido principal -->
+      <div class="content-container">
+        <!-- Panel de acciones -->
+        <div class="action-panel">
+          <button class="btn-primary" id="addPracticanteBtn">+ Añadir Practicante</button>
+          <div class="search-box">
+            <input type="text" id="searchInput" placeholder="Buscar practicantes...">
+            <button class="search-btn">🔍</button>
+          </div>
+        </div>
+        
+        <!-- Modal para añadir/editar practicante -->
+        <div id="practicanteModal" class="modal">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h2 id="modalTitle">Añadir Practicante</h2>
+              <span class="close">&times;</span>
+            </div>
+            <form id="practicanteForm">
+              <input type="hidden" id="practicanteId">
+              <div class="form-group">
+                <label for="nombre">Nombre:</label>
+                <input type="text" id="nombre" required>
+              </div>
+              <div class="form-group">
+                <label for="apellido">Apellido:</label>
+                <input type="text" id="apellido" required>
+              </div>
+              <div class="form-group">
+                <label for="semestre">Semestre:</label>
+                <input type="number" id="semestre" min="1" max="10" required>
+              </div>
+              <div class="form-group">
+                <label for="sexo">Sexo:</label>
+                <select id="sexo" required>
+                  <option value="">Seleccionar</option>
+                  <option value="M">Masculino</option>
+                  <option value="F">Femenino</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="estado">Estado:</label>
+                <select id="estado" required>
+                  <option value="">Seleccionar</option>
+                  <option value="libre">Libre</option>
+                  <option value="ocupado">Ocupado</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="especialidad">Especialidad:</label>
+                <select id="especialidad" required>
+                  <option value="">Seleccionar</option>
+                  <option value="1">Frontend</option>
+                  <option value="2">Backend</option>
+                  <option value="3">Fullstack</option>
+                </select>
+              </div>
+              <div class="form-actions">
+                <button type="submit" class="btn-primary">Guardar</button>
+                <button type="button" class="btn-secondary" id="cancelBtn">Cancelar</button>
+              </div>
+            </form>
+          </div>
+        </div>
+        
+        <!-- Tabla de practicantes -->
+        <div class="table-container">
+          <table id="practicantesTable">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Apellido</th>
+                <th>Semestre</th>
+                <th>Sexo</th>
+                <th>Estado</th>
+                <th>Especialidad</th>
+                <th>Equipo</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody id="practicantesTableBody">
+              <!-- Los datos se cargarán dinámicamente -->
+            </tbody>
+          </table>
+        </div>
+        
+        <!-- Mensaje de carga/error -->
+        <div id="messageContainer">
+          <div id="loadingMessage" class="loading">Cargando practicantes...</div>
+          <div id="errorMessage" class="error" style="display: none;"></div>
+        </div>
+      </div>
+    </main>
+  </div>
+  
+  <script src="{% static 'js/practicante.js' %}"></script>
+</body>
+</html>

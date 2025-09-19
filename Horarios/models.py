@@ -12,7 +12,7 @@ class Dia(models.Model):
         return self.nombre
 
 class HorarioRecuperacion(models.Model):
-    practicante = models.ForeignKey('Practicantes.Practicante', on_delete=models.CASCADE, related_name='horarios')
+    practicante = models.OneToOneField('Practicantes.Practicante', on_delete=models.CASCADE, related_name='horario')
     dias_falta = models.ManyToManyField(Dia, related_name='faltas')
     dias_recuperacion = models.ManyToManyField(Dia, related_name='recuperaciones')
 
