@@ -5,6 +5,7 @@ from rest_framework.response import Response
 from rest_framework.authtoken.models import Token
 from django.contrib.auth import login, logout
 from .serializers import UserSerializer, LoginSerializer
+from django.shortcuts import render
 
 @api_view(['POST'])
 @permission_classes([AllowAny])
@@ -60,3 +61,12 @@ def profile(request):
     return Response({
         'user': UserSerializer(request.user).data
     })
+
+def login_template(request):
+    return render(request, 'login.html')
+
+def register_template(request):
+    return render(request, 'register.html')
+
+def dashboard(request):
+    return render(request, 'dashboard.html')

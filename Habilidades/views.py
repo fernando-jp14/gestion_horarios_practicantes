@@ -1,13 +1,11 @@
 from rest_framework import viewsets
 from .models import Habilidad, NivelHabilidad
-from .serializers import HabilidadSimpleSerializer, NivelHabilidadSerializer, PracticantePuntajeSerializer
+from .serializers import HabilidadSerializer, NivelHabilidadSerializer, PracticanteSerializer
 from Practicantes.models import Practicante
-from django.shortcuts import render
 
-
-class PracticantePuntajeViewSet(viewsets.ModelViewSet):
+class PracticanteViewSet(viewsets.ModelViewSet):
     queryset = Practicante.objects.all()
-    serializer_class = PracticantePuntajeSerializer
+    serializer_class = PracticanteSerializer
 
 
 class HabilidadViewSet(viewsets.ModelViewSet):
