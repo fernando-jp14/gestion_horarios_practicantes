@@ -114,17 +114,22 @@ async function makeAPIRequest(endpoint, options = {}) {
         // Si el endpoint es absoluto, no anteponer API_BASE_URL
         const url = endpoint.startsWith('http') ? endpoint : `${API_BASE_URL}${endpoint}`;
         const response = await fetch(url, finalOptions);
-        
+
         if (!response.ok) {
             const errorData = await response.text();
             throw new Error(`HTTP ${response.status}: ${errorData}`);
         }
-        
+
+        // Manejar 204 No Content
+        if (response.status === 204) {
+            return null;
+        }
+
         const contentType = response.headers.get('content-type');
         if (contentType && contentType.includes('application/json')) {
             return await response.json();
         }
-        
+
         return await response.text();
     } catch (error) {
         console.error('Error en API request:', error);
@@ -419,19 +424,18 @@ async function guardarCambios(metodo = 'POST') {
 async function eliminarTodosPuntajes() {
     if (!appState.practicanteSeleccionado) return;
     
-    const data = {
-        id_practicante: parseInt(appState.practicanteSeleccionado)
-    };
-    
-    const response = await makeAPIRequest('/practicantes_puntaje/borrar_puntajes/', {
+    const id = appState.practicanteSeleccionado;
+    const response = await makeAPIRequest(`/api/practicantes_puntaje/${id}/borrar_puntajes/`, {
         method: 'DELETE',
-        body: JSON.stringify(data)
+        body: JSON.stringify({ id_practicante: parseInt(id) })
     });
-    
-    mostrarNotificacion(response.detail || 'Puntajes eliminados correctamente', 'success');
-    
+    if (response && response.detail) {
+        mostrarNotificacion(response.detail, 'success');
+    } else {
+        mostrarNotificacion('Puntajes eliminados correctamente', 'success');
+    }
     // Recargar datos
-    await cargarHabilidadesPracticante(appState.practicanteSeleccionado);
+    await cargarHabilidadesPracticante(id);
 }
 
 function cerrarModal() {
