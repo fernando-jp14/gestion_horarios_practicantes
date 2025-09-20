@@ -1,3 +1,92 @@
+/* --- Perfil tipo dropdown flotante --- */
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.user-dropdown {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.user-dropdown-toggle {
+    font-weight: 600;
+    color: var(--primary-color);
+    cursor: pointer;
+    background: none;
+    border: none;
+    font-size: 1rem;
+    padding: 0.3rem 0.7rem;
+    border-radius: 6px;
+    transition: background 0.2s;
+}
+.user-dropdown-toggle:hover {
+    background: #e0e7ef;
+}
+
+.profile-dropdown {
+    display: none;
+    position: absolute;
+    right: 0;
+    top: 120%;
+    min-width: 260px;
+    background: var(--surface);
+    box-shadow: var(--shadow-lg);
+    border-radius: var(--border-radius);
+    border: 1px solid var(--border);
+    z-index: 1002;
+    margin-top: 0.5rem;
+}
+.profile-dropdown.active {
+    display: block;
+    animation: modalOpen 0.2s;
+}
+
+.profile-dropdown-content {
+    padding: 1.2rem 1.5rem;
+    color: var(--text-primary);
+}
+.profile-dropdown-content h3 {
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: 0.75rem;
+    color: var(--primary-color);
+}
+.profile-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+.profile-info .info-item {
+    display: flex;
+    gap: 0.5rem;
+    font-size: 0.97rem;
+}
+.profile-info .info-label {
+    font-weight: 600;
+    color: var(--text-secondary);
+}
+.profile-info .info-value {
+    color: var(--text-primary);
+}
+.logout-btn {
+    background: var(--danger-color);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 0.5rem 1.2rem;
+    font-size: 0.95rem;
+    font-weight: 600;
+    margin-left: 1rem;
+    cursor: pointer;
+    transition: var(--transition);
+}
+.logout-btn:hover {
+    background: #dc2626;
+}
 /* Variables CSS */
 :root {
     --primary-color: #3b82f6;

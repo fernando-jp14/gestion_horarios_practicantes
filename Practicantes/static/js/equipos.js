@@ -45,10 +45,110 @@ const elements = {
 let practicantesSeleccionados = [];
 
 // Inicialización de la aplicación
+
 document.addEventListener('DOMContentLoaded', function() {
-    inicializarEventListeners();
-    cargarDatos();
+        inicializarEventListeners();
+        setupProfileMenu();
+        loadProfile();
+        cargarDatos();
 });
+
+// --- Lógica de menú desplegable de perfil y logout (igual que habilidades.js) ---
+function setupProfileMenu() {
+    const profileDropdown = document.getElementById("profileDropdown");
+    const userDropdownToggle = document.getElementById("welcomeUser");
+    const logoutBtn = document.getElementById("logoutBtn");
+
+    // Alternar la visualización del menú desplegable
+    if (userDropdownToggle && profileDropdown) {
+        userDropdownToggle.addEventListener("click", function() {
+            profileDropdown.classList.toggle("active");
+        });
+    }
+
+    // Cerrar el menú desplegable al hacer clic fuera de él
+    document.addEventListener("click", function(event) {
+        if (!profileDropdown || !userDropdownToggle) return;
+        const isClickInsideDropdown = profileDropdown.contains(event.target);
+        const isClickOnToggle = userDropdownToggle.contains(event.target);
+        if (!isClickInsideDropdown && !isClickOnToggle && profileDropdown.classList.contains("active")) {
+            profileDropdown.classList.remove("active");
+        }
+    });
+
+    // Logout
+    if (logoutBtn) {
+        logoutBtn.addEventListener("click", logout);
+    }
+}
+
+// Función de logout igual que habilidades.js
+async function logout() {
+    try {
+        await fetch(`http://127.0.0.1:8000/logout/`, {
+            method: "POST",
+            headers: {
+                Authorization: `Token ${appState.token}`,
+                "Content-Type": "application/json",
+            },
+        });
+    } catch (error) {
+        console.log("Error al hacer logout en el servidor");
+    } finally {
+        // Limpiar localStorage y redirigir
+        localStorage.clear();
+        window.location.href = "/";
+    }
+}
+
+// Cargar perfil al iniciar (igual que habilidades.js)
+async function loadProfile() {
+    const profileContent = document.getElementById("profileContent");
+    const welcomeUser = document.getElementById("welcomeUser");
+    try {
+        const token = appState.token;
+        const response = await fetch(`http://127.0.0.1:8000/profile/`, {
+            headers: {
+                Authorization: `Token ${token}`,
+                "Content-Type": "application/json",
+            },
+        });
+        if (response.ok) {
+            const data = await response.json();
+            const user = data.user;
+            // Actualizar bienvenida
+            if (welcomeUser) welcomeUser.textContent = user.username ? `${user.username}` : (user.email || "Usuario");
+            // Mostrar información del perfil
+            if (profileContent) {
+                profileContent.innerHTML = `
+                  <div class="profile-info">
+                    <div class="info-item">
+                      <span class="info-label">ID de Usuario:</span>
+                      <span class="info-value">${user.id}</span>
+                    </div>
+                    <div class="info-item">
+                      <span class="info-label">Nombre de Usuario:</span>
+                      <span class="info-value">${user.username}</span>
+                    </div>
+                    <div class="info-item">
+                      <span class="info-label">Email:</span>
+                      <span class="info-value">${user.email || "No especificado"}</span>
+                    </div>
+                  </div>
+                `;
+            }
+        } else if (response.status === 401) {
+            // Token inválido, redirigir al login
+            localStorage.clear();
+            window.location.href = "/";
+        } else {
+            if (welcomeUser) welcomeUser.textContent = "Usuario";
+            if (profileContent) profileContent.innerHTML = `<div class="error">No se pudo cargar el perfil</div>`;
+        }
+    } catch (error) {
+        if (profileContent) profileContent.innerHTML = `<div class="error">Error al cargar el perfil</div>`;
+    }
+}
 
 function inicializarEventListeners() {
     // Botones principales

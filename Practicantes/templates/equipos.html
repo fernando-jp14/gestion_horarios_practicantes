@@ -1,46 +1,78 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Gestión de Equipos - Reflexo</title>
-    <link rel="stylesheet" href="{% static 'css/equipos.css' %}">
-</head>
-<body>
+    <link rel="stylesheet" href="{% static 'css/equipos.css' %}" />
+  </head>
+  <body>
     <!-- Menú lateral -->
     <aside class="sidebar">
-        <div class="sidebar-header">
-            <div class="logo">📱</div>
-            <span class="brand">Reflexo</span>
-            <span class="subtitle">Horarios & Habilidades</span>
-        </div>
-        <nav class="sidebar-nav">
-            <ul>
-                <li><a href="/api/horarios_template/"><span>📅</span> Horarios (Todos)</a></li>
-                <li><a href="/api/practicante_template/"><span>👥</span> Practicantes</a></li>
-                <li><a href="/api/habilidades_template/"><span>🧠</span> Habilidades</a></li>
-                <li><a href="#" class="active"><span>⚡</span> Generar equipos</a></li>
-                <li><a href="/api/exportar/"><span>📤</span> Exportar</a></li>
-            </ul>
-        </nav>
+      <div class="sidebar-header">
+        <div class="logo">📱</div>
+        <span class="brand">Reflexo</span>
+        <span class="subtitle">Horarios & Habilidades</span>
+      </div>
+      <nav class="sidebar-nav">
+        <ul>
+          <li>
+            <a href="/api/horarios_template/"
+              ><span>📅</span> Horarios (Todos)</a
+            >
+          </li>
+          <li>
+            <a href="/api/practicante_template/"
+              ><span>👥</span> Practicantes</a
+            >
+          </li>
+          <li>
+            <a href="/api/habilidades_template/"><span>🧠</span> Habilidades</a>
+          </li>
+          <li>
+            <a href="#" class="active"><span>⚡</span> Generar equipos</a>
+          </li>
+          <li>
+            <a href="/api/exportar/"><span>📤</span> Exportar</a>
+          </li>
+        </ul>
+      </nav>
     </aside>
 
     <!-- Contenido principal -->
     <div class="main-content">
-        <div class="container">
+      <div class="container">
         <header class="header">
-            <h1>Gestión de Equipos</h1>
-            <div class="header-actions">
-                <button id="btnGenerarEquipos" class="btn btn-primary">
-                    <span class="icon">⚡</span>
-                    Generar Equipos Automáticos
-                </button>
-                <button id="btnNuevoEquipo" class="btn btn-secondary">
-                    <span class="icon">➕</span>
-                    Nuevo Equipo
-                </button>
+          <h1>Gestión de Equipos</h1>
+          <div class="header-actions">
+            <button id="btnGenerarEquipos" class="btn btn-primary">
+              <span class="icon">⚡</span>
+              Generar Equipos Automáticos
+            </button>
+            <button id="btnNuevoEquipo" class="btn btn-secondary">
+              <span class="icon">➕</span>
+              Nuevo Equipo
+            </button>
+            <div class="user-info" style="margin-left: 2rem">
+              <!-- Botón de usuario que despliega el perfil -->
+              <div class="user-dropdown">
+                <span id="welcomeUser" class="user-dropdown-toggle"
+                  >Cargando...</span
+                >
+                <div id="profileDropdown" class="profile-dropdown">
+                  <!-- Contenido del menú desplegable -->
+                  <div class="profile-dropdown-content">
+                    <h3>Mi Perfil</h3>
+                    <div id="profileContent" class="loading">
+                      Cargando información del perfil...
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <button class="logout-btn" id="logoutBtn">Cerrar Sesión</button>
             </div>
+          </div>
         </header>
 
         <!-- Mensajes de notificación -->
@@ -48,83 +80,105 @@
 
         <!-- Modal para crear/editar equipo -->
         <div id="modalEquipo" class="modal">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h3 id="modalTitle">Crear Nuevo Equipo</h3>
-                    <span class="close">&times;</span>
-                </div>
-                <form id="formEquipo">
-                    <div class="form-group">
-                        <label for="nombreEquipo">Nombre del Equipo:</label>
-                        <input type="text" id="nombreEquipo" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Practicantes Disponibles:</label>
-                        <div id="practicantesDisponibles" class="practicantes-grid">
-                            <!-- Se llena dinámicamente -->
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label>Practicantes Seleccionados:</label>
-                        <div id="practicantesSeleccionados" class="practicantes-selected">
-                            <p class="empty-message">No hay practicantes seleccionados</p>
-                        </div>
-                    </div>
-                    <div class="modal-actions">
-                        <button type="button" class="btn btn-cancel" id="btnCancelar">Cancelar</button>
-                        <button type="submit" class="btn btn-primary" id="btnGuardar">Guardar</button>
-                    </div>
-                </form>
+          <div class="modal-content">
+            <div class="modal-header">
+              <h3 id="modalTitle">Crear Nuevo Equipo</h3>
+              <span class="close">&times;</span>
             </div>
+            <form id="formEquipo">
+              <div class="form-group">
+                <label for="nombreEquipo">Nombre del Equipo:</label>
+                <input type="text" id="nombreEquipo" required />
+              </div>
+              <div class="form-group">
+                <label>Practicantes Disponibles:</label>
+                <div id="practicantesDisponibles" class="practicantes-grid">
+                  <!-- Se llena dinámicamente -->
+                </div>
+              </div>
+              <div class="form-group">
+                <label>Practicantes Seleccionados:</label>
+                <div
+                  id="practicantesSeleccionados"
+                  class="practicantes-selected"
+                >
+                  <p class="empty-message">No hay practicantes seleccionados</p>
+                </div>
+              </div>
+              <div class="modal-actions">
+                <button type="button" class="btn btn-cancel" id="btnCancelar">
+                  Cancelar
+                </button>
+                <button type="submit" class="btn btn-primary" id="btnGuardar">
+                  Guardar
+                </button>
+              </div>
+            </form>
+          </div>
         </div>
 
         <!-- Lista de equipos -->
         <div class="equipos-container">
-            <div id="loadingEquipos" class="loading">
-                <div class="spinner"></div>
-                <p>Cargando equipos...</p>
-            </div>
-            
-            <div id="equiposGrid" class="equipos-grid">
-                <!-- Se llena dinámicamente -->
-            </div>
-            
-            <div id="noEquipos" class="empty-state" style="display: none;">
-                <div class="empty-icon">📋</div>
-                <h3>No hay equipos creados</h3>
-                <p>Crea tu primer equipo o genera equipos automáticamente</p>
-            </div>
+          <div id="loadingEquipos" class="loading">
+            <div class="spinner"></div>
+            <p>Cargando equipos...</p>
+          </div>
+
+          <div id="equiposGrid" class="equipos-grid">
+            <!-- Se llena dinámicamente -->
+          </div>
+
+          <div id="noEquipos" class="empty-state" style="display: none">
+            <div class="empty-icon">📋</div>
+            <h3>No hay equipos creados</h3>
+            <p>Crea tu primer equipo o genera equipos automáticamente</p>
+          </div>
         </div>
 
         <!-- Modal de confirmación para eliminar -->
         <div id="modalConfirmar" class="modal">
-            <div class="modal-content modal-small">
-                <div class="modal-header">
-                    <h3>Confirmar Eliminación</h3>
-                </div>
-                <p>¿Estás seguro de que deseas eliminar el equipo <strong id="equipoEliminar"></strong>?</p>
-                <div class="modal-actions">
-                    <button type="button" class="btn btn-cancel" id="btnCancelarEliminar">Cancelar</button>
-                    <button type="button" class="btn btn-danger" id="btnConfirmarEliminar">Eliminar</button>
-                </div>
+          <div class="modal-content modal-small">
+            <div class="modal-header">
+              <h3>Confirmar Eliminación</h3>
             </div>
+            <p>
+              ¿Estás seguro de que deseas eliminar el equipo
+              <strong id="equipoEliminar"></strong>?
+            </p>
+            <div class="modal-actions">
+              <button
+                type="button"
+                class="btn btn-cancel"
+                id="btnCancelarEliminar"
+              >
+                Cancelar
+              </button>
+              <button
+                type="button"
+                class="btn btn-danger"
+                id="btnConfirmarEliminar"
+              >
+                Eliminar
+              </button>
+            </div>
+          </div>
         </div>
 
         <!-- Modal de progreso para generación automática -->
         <div id="modalProgreso" class="modal">
-            <div class="modal-content modal-small">
-                <div class="modal-header">
-                    <h3>Generando Equipos</h3>
-                </div>
-                <div class="progress-container">
-                    <div class="spinner"></div>
-                    <p id="progresoTexto">Analizando practicantes disponibles...</p>
-                </div>
+          <div class="modal-content modal-small">
+            <div class="modal-header">
+              <h3>Generando Equipos</h3>
             </div>
+            <div class="progress-container">
+              <div class="spinner"></div>
+              <p id="progresoTexto">Analizando practicantes disponibles...</p>
+            </div>
+          </div>
         </div>
-        </div>
+      </div>
     </div>
 
     <script src="{% static 'js/equipos.js' %}"></script>
-</body>
+  </body>
 </html>

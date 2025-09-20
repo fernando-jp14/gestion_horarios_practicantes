@@ -57,15 +57,43 @@ class EquipoSerializer(serializers.ModelSerializer):
             nombres = ', '.join(f"{p.nombre} {p.apellido}" for p in ocupados)
             raise serializers.ValidationError(f"Los siguientes practicantes están ocupados y no pueden ser asignados: {nombres}")
         # Contar especialidades (máximos)
-        backend = sum(1 for p in value if getattr(p.especialidad, 'nombre', '').strip().upper() == 'BACKEND')
-        frontend = sum(1 for p in value if getattr(p.especialidad, 'nombre', '').strip().upper() == 'FRONTEND')
+        backend_list = [p for p in value if getattr(p.especialidad, 'nombre', '').strip().upper() == 'BACKEND']
+        frontend_list = [p for p in value if getattr(p.especialidad, 'nombre', '').strip().upper() == 'FRONTEND']
         scrum = sum(1 for p in value if getattr(p.especialidad, 'nombre', '').strip().upper() == 'SCRUM MASTER')
-        if backend > 2:
+        if len(backend_list) > 2:
             raise serializers.ValidationError("No puede haber más de 2 practicantes de especialidad BACKEND en un equipo.")
-        if frontend > 2:
+        if len(frontend_list) > 2:
             raise serializers.ValidationError("No puede haber más de 2 practicantes de especialidad FRONTEND en un equipo.")
         if scrum > 1:
             raise serializers.ValidationError("No puede haber más de 1 practicante de especialidad SCRUM MASTER en un equipo.")
+
+
+        # Validación: los 2 backends no pueden faltar el mismo día (usando HorarioRecuperacion)
+        if len(backend_list) == 2:
+            dias1 = set()
+            dias2 = set()
+            for p, dias in zip(backend_list, [dias1, dias2]):
+                horario = getattr(p, 'horario', None)
+                if horario:
+                    dias.update(str(d) for d in horario.dias_falta.all())
+            dias_comunes = dias1 & dias2
+            if dias_comunes:
+                dias_str = ', '.join(dias_comunes)
+                raise serializers.ValidationError(f"Los 2 practicantes BACKEND no pueden faltar el mismo día: {dias_str}.")
+
+        # Validación: los 2 frontends no pueden faltar el mismo día (usando HorarioRecuperacion)
+        if len(frontend_list) == 2:
+            dias1 = set()
+            dias2 = set()
+            for p, dias in zip(frontend_list, [dias1, dias2]):
+                horario = getattr(p, 'horario', None)
+                if horario:
+                    dias.update(str(d) for d in horario.dias_falta.all())
+            dias_comunes = dias1 & dias2
+            if dias_comunes:
+                dias_str = ', '.join(dias_comunes)
+                raise serializers.ValidationError(f"Los 2 practicantes FRONTEND no pueden faltar el mismo día: {dias_str}.")
+
         return value
 
 
