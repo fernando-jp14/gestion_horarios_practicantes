@@ -67,6 +67,3 @@ def login_template(request):
 
 def register_template(request):
     return render(request, 'register.html')
-
-def dashboard(request):
-    return render(request, 'dashboard.html')
