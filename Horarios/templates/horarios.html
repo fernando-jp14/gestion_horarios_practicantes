@@ -1,0 +1,190 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="{% static 'horarios.css' %}" />
+    <link rel="icon" type="image/x-icon" href="{% static 'favicon.ico' %}">
+    <title>Gestión de Horarios</title>
+  </head>
+
+  <body>
+    <div class="dashboard-layout">
+      <!-- Menú lateral -->
+      <aside class="sidebar">
+        <div class="sidebar-header">
+          <div class="logo"></div>
+          <span class="brand">Reflexo</span>
+          <span class="subtitle">Horarios & Habilidades</span>
+        </div>
+        <nav class="sidebar-nav">
+          <ul>
+            <li>
+              <a href="/api/horarios_template/" class="active"><span>📅</span> Horarios (Todos)</a>
+            </li>
+            <li>
+              <a href="/api/practicante_template/"><span>👥</span> Practicantes</a>
+            </li>
+            <li>
+              <a href="/api/habilidades_template/"><span>🧠</span> Habilidades</a>
+            </li>
+            <li>
+              <a href="/api/equipos_template/"><span>👥</span> Generar equipos</a>
+            </li>
+            <li>
+              <a href="#"><span>📤</span> Exportar</a>
+            </li>
+          </ul>
+        </nav>
+      </aside>
+
+      <main class="main-content">
+        <!-- Barra superior -->
+        <nav class="navbar dark">
+          <h1>Gestión de Horarios de Recuperación</h1>
+          <div class="user-info">
+            <span id="welcomeUser">Administrador</span>
+            <button class="logout-btn" id="logoutBtn">Cerrar Sesión</button>
+          </div>
+        </nav>
+
+        <!-- Contenido principal -->
+        <div class="content-container">
+          <!-- Panel de acciones -->
+          <div class="action-panel">
+            <button class="btn-primary" id="addHorarioBtn">
+              + Añadir Horario
+            </button>
+          </div>
+
+          <!-- Modal para añadir/editar horario -->
+          <div id="horarioModal" class="modal">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h2 id="modalTitle">Añadir Horario de Recuperación</h2>
+                <span class="close">&times;</span>
+              </div>
+              <form id="horarioForm">
+                <input type="hidden" id="horarioId" />
+                <div class="form-group">
+                  <label for="practicante">Practicante:</label>
+                  <select id="practicante" required>
+                    <option value="">Seleccionar practicante</option>
+                    <!-- Los practicantes se cargarán dinámicamente -->
+                  </select>
+                </div>
+
+                <div class="form-row">
+                  <div class="form-group">
+                    <label>Días de Falta:</label>
+                    <div class="checkbox-group" id="diasFaltaGroup">
+                      <label
+                        ><input type="checkbox" name="dias_falta" value="1" />
+                        Lunes</label
+                      >
+                      <label
+                        ><input type="checkbox" name="dias_falta" value="2" />
+                        Martes</label
+                      >
+                      <label
+                        ><input type="checkbox" name="dias_falta" value="3" />
+                        Miércoles</label
+                      >
+                      <label
+                        ><input type="checkbox" name="dias_falta" value="4" />
+                        Jueves</label
+                      >
+                      <label
+                        ><input type="checkbox" name="dias_falta" value="5" />
+                        Viernes</label
+                      >
+                      <label
+                        ><input type="checkbox" name="dias_falta" value="6" />
+                        Sábado</label
+                      >
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <label>Días de Recuperación:</label>
+                    <div class="checkbox-group" id="diasRecuperacionGroup">
+                      <label
+                        ><input
+                          type="checkbox"
+                          name="dias_recuperacion"
+                          value="1"
+                        />
+                        Lunes</label
+                      >
+                      <label
+                        ><input
+                          type="checkbox"
+                          name="dias_recuperacion"
+                          value="2"
+                        />
+                        Martes</label
+                      >
+                      <label
+                        ><input
+                          type="checkbox"
+                          name="dias_recuperacion"
+                          value="3"
+                        />
+                        Miércoles</label
+                      >
+                      <label
+                        ><input
+                          type="checkbox"
+                          name="dias_recuperacion"
+                          value="4"
+                        />
+                        Jueves</label
+                      >
+                      <label
+                        ><input
+                          type="checkbox"
+                          name="dias_recuperacion"
+                          value="5"
+                        />
+                        Viernes</label
+                      >
+                      <label
+                        ><input
+                          type="checkbox"
+                          name="dias_recuperacion"
+                          value="6"
+                        />
+                        Sábado</label
+                      >
+                    </div>
+                  </div>
+                </div>
+
+                <div class="form-actions">
+                  <button type="submit" class="btn-primary">Guardar</button>
+                  <button type="button" class="btn-secondary" id="cancelBtn">
+                    Cancelar
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+
+          <!-- Lista de horarios -->
+          <div class="horarios-container" id="horariosContainer">
+            <!-- Los horarios se cargarán dinámicamente -->
+          </div>
+
+          <!-- Mensaje de carga/error -->
+          <div id="messageContainer">
+            <div id="loadingMessage" class="loading">Cargando horarios...</div>
+            <div id="errorMessage" class="error" style="display: none"></div>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <script src="{% static 'horarios.js' %}"></script>
+  </body>
+</html>

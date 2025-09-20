@@ -6,6 +6,7 @@ from .serializers import HorarioRecuperacionSerializer
 from .utils import export_horarios_to_excel
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import action, permission_classes
+from django.shortcuts import render
 
 class HorarioRecuperacionViewSet(viewsets.ModelViewSet):
     queryset = HorarioRecuperacion.objects.all()
@@ -23,3 +24,6 @@ class HorarioRecuperacionViewSet(viewsets.ModelViewSet):
         )
         response['Content-Disposition'] = 'attachment; filename=horarios_recuperacion.xlsx'
         return response
+    
+def horarios_template(request):
+    return render(request, 'horarios.html')

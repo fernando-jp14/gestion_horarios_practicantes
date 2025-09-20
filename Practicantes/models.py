@@ -12,7 +12,7 @@ class Especialidad(models.Model):
 
 
 class Equipo(models.Model):
-    nombre = models.CharField(max_length=100, blank=False)
+    nombre = models.CharField(max_length=100, blank=False, unique=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     confirmado = models.BooleanField(default=False)
@@ -37,7 +37,6 @@ class Practicante(models.Model):
     class SexoChoices(models.TextChoices):
         M = 'M', 'Masculino'
         F = 'F', 'Femenino'
-        O = 'O', 'Otro'
 
     nombre = models.CharField(max_length=100)
     apellido = models.CharField(max_length=100)
@@ -48,7 +47,7 @@ class Practicante(models.Model):
     equipo = models.ForeignKey(Equipo, on_delete=models.SET_NULL, null=True, blank=True, related_name='practicantes')
 
     class Meta:
-        ordering = ['nombre', 'apellido']
+        ordering = ['id']
         verbose_name = 'Practicante'
         verbose_name_plural = 'Practicantes'
 

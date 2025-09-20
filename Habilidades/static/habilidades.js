@@ -17,11 +17,62 @@ const practicantesContainer = document.querySelector(".practicantes-container");
 const habilidadesTableBody = document.getElementById("habilidadesTableBody");
 const practicanteSelect = document.getElementById("practicante");
 
-// Inicializar la aplicación
+// --- Inicializar la aplicación y lógica de perfil ---
 document.addEventListener("DOMContentLoaded", function() {
   loadData();
   setupEventListeners();
+  // Lógica de perfil de usuario (igual que dashboard.js)
+  setupProfileMenu();
+  loadProfile();
 });
+
+// --- Lógica de menú desplegable de perfil y logout (igual que dashboard.js) ---
+function setupProfileMenu() {
+  const profileDropdown = document.getElementById("profileDropdown");
+  const userDropdownToggle = document.getElementById("welcomeUser");
+  const logoutBtn = document.getElementById("logoutBtn");
+
+  // Alternar la visualización del menú desplegable
+  if (userDropdownToggle && profileDropdown) {
+    userDropdownToggle.addEventListener("click", function() {
+      profileDropdown.classList.toggle("active");
+    });
+  }
+
+  // Cerrar el menú desplegable al hacer clic fuera de él
+  document.addEventListener("click", function(event) {
+    if (!profileDropdown || !userDropdownToggle) return;
+    const isClickInsideDropdown = profileDropdown.contains(event.target);
+    const isClickOnToggle = userDropdownToggle.contains(event.target);
+    if (!isClickInsideDropdown && !isClickOnToggle && profileDropdown.classList.contains("active")) {
+      profileDropdown.classList.remove("active");
+    }
+  });
+
+  // Logout
+  if (logoutBtn) {
+    logoutBtn.addEventListener("click", logout);
+  }
+}
+
+// Función de logout igual que dashboard.js
+async function logout() {
+  try {
+    await fetch(`${API_BASE}/logout/`, {
+      method: "POST",
+      headers: {
+        Authorization: `Token ${getAuthToken()}`,
+        "Content-Type": "application/json",
+      },
+    });
+  } catch (error) {
+    console.log("Error al hacer logout en el servidor");
+  } finally {
+    // Limpiar localStorage y redirigir
+    localStorage.clear();
+    window.location.href = "/";
+  }
+}
 
 // Configurar event listeners
 function setupEventListeners() {
@@ -385,4 +436,59 @@ function showError(message) {
 function hideMessages() {
   loadingMessage.style.display = "none";
   errorMessage.style.display = "none";
+}
+
+
+// Cargar perfil al iniciar (igual que dashboard.js)
+async function loadProfile() {
+  const profileContent = document.getElementById("profileContent");
+  const welcomeUser = document.getElementById("welcomeUser");
+  try {
+    const token = getAuthToken();
+    const response = await fetch(`${API_BASE}/profile/`, {
+      headers: {
+        Authorization: `Token ${token}`,
+        "Content-Type": "application/json",
+      },
+    });
+    if (response.ok) {
+      const data = await response.json();
+      const user = data.user;
+      // Actualizar bienvenida
+      if (welcomeUser) welcomeUser.textContent = `${user.username} • Admin`;
+      // Mostrar información del perfil
+      if (profileContent) {
+        profileContent.innerHTML = `
+          <div class="profile-info">
+            <div class="info-item">
+              <span class="info-label">ID de Usuario:</span>
+              <span class="info-value">${user.id}</span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">Nombre de Usuario:</span>
+              <span class="info-value">${user.username}</span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">Email:</span>
+              <span class="info-value">${user.email || "No especificado"}</span>
+            </div>
+          </div>
+        `;
+      }
+    } else if (response.status === 401) {
+      // Token inválido, redirigir al login
+      localStorage.clear();
+      window.location.href = "/";
+    } else {
+      throw new Error("Error al cargar perfil");
+    }
+  } catch (error) {
+    if (profileContent) {
+      profileContent.innerHTML = `
+        <div class="error">
+          Error al cargar la información del perfil
+        </div>
+      `;
+    }
+  }
 }

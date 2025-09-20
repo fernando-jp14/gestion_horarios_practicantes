@@ -20,10 +20,10 @@
       </div>
       <nav class="sidebar-nav">
         <ul>
-          <li><a href="/dashboard/"><span>📅</span> Horarios (Todos)</a></li>
+          <li><a href="/api/horarios_template/"><span>📅</span> Horarios (Todos)</a></li>
           <li><a href="/api/practicante_template/"><span>👥</span> Practicantes</a></li>
           <li><a href="#" class="active"><span>🧠</span> Habilidades</a></li>
-          <li><a href="#"><span>👥</span> Generar equipos</a></li>
+          <li><a href="/api/equipos_template/"><span>👥</span> Generar equipos</a></li>
           <li><a href="#"><span>📤</span> Exportar</a></li>
         </ul>
       </nav>
@@ -34,22 +34,22 @@
       <nav class="navbar dark">
         <h1>Gestión de Habilidades</h1>
         <div class="user-info">
-          <span id="welcomeUser">Administrador</span>
+          <!-- Botón de usuario que despliega el perfil -->
+          <div class="user-dropdown">
+            <span id="welcomeUser" class="user-dropdown-toggle">Cargando...</span>
+            <div id="profileDropdown" class="profile-dropdown">
+              <!-- Contenido del menú desplegable -->
+              <div class="profile-dropdown-content">
+                <h3>Mi Perfil</h3>
+                <div id="profileContent" class="loading">
+                  Cargando información del perfil...
+                </div>
+              </div>
+            </div>
+          </div>
           <button class="logout-btn" id="logoutBtn">Cerrar Sesión</button>
         </div>
       </nav>
-      <div class="user-dropdown">
-        <span id="welcomeUser" class="user-dropdown-toggle">Cargando...</span>
-        <div id="profileDropdown" class="profile-dropdown">
-          <!-- Contenido del menú desplegable -->
-          <div class="profile-dropdown-content">
-            <h3>Mi Perfil</h3>
-            <div id="profileContent" class="loading">
-              Cargando información del perfil...
-            </div>
-          </div>
-        </div>
-      </div>
 
       <!-- Contenido principal -->
       <div class="content-container">

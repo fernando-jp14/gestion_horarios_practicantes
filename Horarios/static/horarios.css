@@ -141,10 +141,7 @@ body {
 
 /* Action panel */
 .action-panel {
-  display: flex;
-  justify-content: space-between;
   margin-bottom: 1.5rem;
-  align-items: center;
 }
 
 .btn-primary {
@@ -163,56 +160,21 @@ body {
   transform: translateY(-2px);
 }
 
-/* View toggle */
-.view-toggle {
-  display: flex;
-  background: #2d3147;
-  border-radius: 6px;
-  overflow: hidden;
-}
-
-.toggle-btn {
-  background: transparent;
-  border: none;
-  padding: 0.7rem 1.2rem;
-  color: #a0aec0;
-  cursor: pointer;
-  transition: all 0.2s;
-}
-
-.toggle-btn.active {
-  background: #3f4359;
-  color: #a18fff;
-}
-
-.toggle-btn:hover:not(.active) {
-  background: #34394d;
-}
-
-/* View content */
-.view-content {
-  display: none;
-}
-
-.view-content.active {
-  display: block;
-}
-
-/* Practicantes container (vista por practicantes) */
-.practicantes-container {
+/* Horarios container */
+.horarios-container {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
   gap: 1.5rem;
 }
 
-.practicante-card {
+.horario-card {
   background: #2d3147;
   border-radius: 8px;
   padding: 1.5rem;
   box-shadow: 0 4px 12px rgba(0,0,0,0.1);
 }
 
-.practicante-header {
+.horario-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -221,101 +183,13 @@ body {
   border-bottom: 1px solid #3f4359;
 }
 
-.practicante-name {
+.horario-title {
   font-size: 1.1rem;
   font-weight: 600;
   color: #e4e8ef;
 }
 
-.practicante-skills {
-  margin-top: 1rem;
-}
-
-.skill-item {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0.7rem;
-  background: #34394d;
-  border-radius: 6px;
-  margin-bottom: 0.5rem;
-}
-
-.skill-name {
-  font-weight: 500;
-}
-
-.skill-score {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.score-value {
-  font-weight: 600;
-  color: #a18fff;
-}
-
-.score-badge {
-  padding: 0.2rem 0.5rem;
-  border-radius: 12px;
-  font-size: 0.75rem;
-  font-weight: 500;
-}
-
-.score-high {
-  background: rgba(72, 187, 120, 0.2);
-  color: #48bb78;
-}
-
-.score-medium {
-  background: rgba(246, 173, 85, 0.2);
-  color: #f6ad55;
-}
-
-.score-low {
-  background: rgba(245, 101, 101, 0.2);
-  color: #f56565;
-}
-
-.no-skills {
-  text-align: center;
-  color: #a0aec0;
-  font-style: italic;
-  padding: 1rem;
-}
-
-/* Table (vista por habilidades) */
-.table-container {
-  background: #2d3147;
-  border-radius: 8px;
-  overflow: hidden;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-}
-
-table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-th, td {
-  padding: 1rem;
-  text-align: left;
-  border-bottom: 1px solid #3f4359;
-}
-
-th {
-  background: #3f4359;
-  color: #a18fff;
-  font-weight: 600;
-}
-
-tr:hover {
-  background: #34394d;
-}
-
-/* Action buttons */
-.action-buttons {
+.horario-actions {
   display: flex;
   gap: 0.5rem;
 }
@@ -347,6 +221,64 @@ tr:hover {
   background: rgba(245, 101, 101, 0.3);
 }
 
+.horario-content {
+  margin-top: 1rem;
+}
+
+.dias-section {
+  margin-bottom: 1rem;
+}
+
+.section-title {
+  font-weight: 600;
+  color: #a0aec0;
+  margin-bottom: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.section-title.falta::before {
+  content: "❌";
+}
+
+.section-title.recuperacion::before {
+  content: "✅";
+}
+
+.dias-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.dia-badge {
+  padding: 0.3rem 0.8rem;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.badge-falta {
+  background: rgba(245, 101, 101, 0.2);
+  color: #f56565;
+  border: 1px solid rgba(245, 101, 101, 0.3);
+}
+
+.badge-recuperacion {
+  background: rgba(72, 187, 120, 0.2);
+  color: #48bb78;
+  border: 1px solid rgba(72, 187, 120, 0.3);
+}
+
+.no-horarios {
+  text-align: center;
+  color: #a0aec0;
+  font-style: italic;
+  padding: 2rem;
+  grid-column: 1 / -1;
+}
+
 /* Modal */
 .modal {
   display: none;
@@ -364,8 +296,10 @@ tr:hover {
   margin: 5% auto;
   padding: 0;
   border-radius: 8px;
-  width: 500px;
+  width: 600px;
   box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+  max-height: 90vh;
+  overflow-y: auto;
 }
 
 .modal-header {
@@ -377,6 +311,9 @@ tr:hover {
   align-items: center;
   border-top-left-radius: 8px;
   border-top-right-radius: 8px;
+  position: sticky;
+  top: 0;
+  z-index: 10;
 }
 
 .modal-header h2 {
@@ -399,7 +336,7 @@ form {
 }
 
 .form-group {
-  margin-bottom: 1rem;
+  margin-bottom: 1.5rem;
 }
 
 .form-group label {
@@ -423,11 +360,52 @@ form {
   border-color: #6f6fff;
 }
 
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+
+.checkbox-group {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem;
+  background: #23273a;
+  padding: 1rem;
+  border-radius: 6px;
+  border: 1px solid #3f4359;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.checkbox-group label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: normal;
+  margin-bottom: 0;
+  cursor: pointer;
+  padding: 0.3rem;
+  border-radius: 4px;
+  transition: background 0.2s;
+}
+
+.checkbox-group label:hover {
+  background: #2d3147;
+}
+
+.checkbox-group input[type="checkbox"] {
+  width: auto;
+  margin: 0;
+}
+
 .form-actions {
   display: flex;
   justify-content: flex-end;
   gap: 1rem;
   margin-top: 1.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid #3f4359;
 }
 
 .btn-secondary {
@@ -463,91 +441,18 @@ form {
   border-left: 4px solid #f56565;
 }
 
-
-/* Dropdown (perfil) - igual que dashboard */
-.user-dropdown {
-  position: relative;
-  display: inline-block;
-}
-
-.user-dropdown-toggle {
-  cursor: pointer;
-  padding: 0.5rem 1rem;
-  border-radius: 6px;
-  transition: background-color 0.2s;
-}
-
-.user-dropdown-toggle:hover {
-  background-color: rgba(255, 255, 255, 0.1);
-}
-
-.profile-dropdown {
-  display: none;
-  position: absolute;
-  right: 0;
-  top: 100%;
-  width: 320px;
-  background: #23273a;
-  border-radius: 12px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-  z-index: 1000;
-  margin-top: 0.5rem;
-  border: 1px solid #2d3147;
-  overflow: hidden;
-}
-
-.profile-dropdown-content {
-  padding: 1.5rem;
-}
-
-.profile-dropdown-content h3 {
-  margin-bottom: 1rem;
-  color: #e4e8ef;
-  font-size: 1.2rem;
-  border-bottom: 1px solid #2d3147;
-  padding-bottom: 0.5rem;
-}
-
-/* Mostrar el dropdown cuando tiene la clase 'active' */
-.profile-dropdown.active {
-  display: block;
-}
-
-/* Ajustes para el contenido del perfil en el dropdown */
-#profileContent .profile-info {
-  display: grid;
-  gap: 0.8rem;
-}
-
-#profileContent .info-item {
-  display: flex;
-  justify-content: space-between;
-  padding: 0.6rem;
-  background: #2d3147;
-  border-radius: 6px;
-  border-left: 3px solid #a18fff;
-  color: #e4e8ef;
-  font-size: 0.9rem;
-}
-
-#profileContent .info-label {
-  font-weight: bold;
-  color: #a0aec0;
-}
-
-#profileContent .info-value {
-  color: #e4e8ef;
-}
-
-#profileContent .loading, 
-#profileContent .error {
-  padding: 1rem;
-  text-align: center;
-}
-
-#profileContent .error {
-  background: rgba(197, 48, 48, 0.1);
-  color: #f56565;
-  border-radius: 6px;
-  border-left: 3px solid #e53e3e;
+/* Responsive */
+@media (max-width: 768px) {
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+  
+  .horarios-container {
+    grid-template-columns: 1fr;
+  }
+  
+  .modal-content {
+    width: 90%;
+    margin: 10% auto;
+  }
 }
