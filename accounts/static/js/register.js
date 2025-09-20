@@ -41,5 +41,5 @@ document
 
 // Verificar si ya está logueado
 if (localStorage.getItem("token")) {
-  window.location.href = "/dashboard/";
+  window.location.href = "http://127.0.0.1:8000/api/horarios_template/";
 }

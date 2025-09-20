@@ -1,3 +1,12 @@
+// Asignar evento al botón Exportar correctamente y definir referencia global
+document.addEventListener('DOMContentLoaded', function() {
+    // ...otros listeners...
+    const exportBtn = document.getElementById('btnExportar');
+    if (exportBtn) {
+        elements.btnExportar = exportBtn;
+        exportBtn.addEventListener('click', exportarExcel);
+    }
+});
 // Configuración de la API
 const API_BASE_URL = 'http://127.0.0.1:8000';
 
@@ -36,6 +45,7 @@ const elements = {
     btnGuardar: document.getElementById('btnGuardar'),
     btnReemplazar: document.getElementById('btnReemplazar'),
     btnEliminar: document.getElementById('btnEliminar'),
+    // btnExportar se asigna dinámicamente en DOMContentLoaded
     
     // Modal
     modalConfirmar: document.getElementById('modalConfirmar'),
@@ -349,6 +359,45 @@ function confirmarAccion(accion) {
     elements.modalTitle.textContent = messages[accion].title;
     elements.modalMessage.textContent = messages[accion].message;
     elements.modalConfirmar.style.display = 'block';
+}
+
+// Función de exportar Excel de habilidades (movida aquí para mejor organización)
+async function exportarExcel() {
+    if (!elements.btnExportar) return;
+    try {
+        elements.btnExportar.disabled = true;
+        elements.btnExportar.innerHTML = '<span>⏳</span> Exportando...';
+
+        const response = await fetch(`${API_BASE_URL}/api/niveles-habilidad/exportar-excel/`, {
+            headers: {
+                'Authorization': `Token ${appState.token}`
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error('Error al exportar');
+        }
+
+        const blob = await response.blob();
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'habilidades.xlsx';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        window.URL.revokeObjectURL(url);
+
+        mostrarNotificacion('Archivo exportado correctamente', 'success');
+
+    } catch (error) {
+        mostrarNotificacion('Error al exportar: ' + error.message, 'error');
+    } finally {
+        if (elements.btnExportar) {
+            elements.btnExportar.disabled = false;
+            elements.btnExportar.innerHTML = '<span>📤</span> Exportar Excel';
+        }
+    }
 }
 
 async function ejecutarAccion() {
