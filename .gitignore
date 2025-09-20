@@ -7,3 +7,4 @@ migrations/
 .env
 prueba/
 env/
+endpoints.md
