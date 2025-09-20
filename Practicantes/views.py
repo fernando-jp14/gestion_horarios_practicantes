@@ -1,10 +1,12 @@
 from django.shortcuts import render
 from rest_framework import viewsets
-from .models import Practicante, Equipo
-from .serializers import PracticanteSerializer, EquipoSerializer
-from django.shortcuts import render
+from .models import Practicante, Equipo, Especialidad
+from .serializers import PracticanteSerializer, EquipoSerializer, EspecialidadSerializer
 
 # Create your views here.
+class EspecialidadViewSet(viewsets.ModelViewSet):
+    queryset = Especialidad.objects.all()
+    serializer_class = EspecialidadSerializer
 
 class PracticanteViewSet(viewsets.ModelViewSet):
     serializer_class = PracticanteSerializer

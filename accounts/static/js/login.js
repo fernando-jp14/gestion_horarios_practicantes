@@ -23,8 +23,8 @@ document.getElementById("loginForm").addEventListener("submit", async (e) => {
       localStorage.setItem("token", data.token);
       localStorage.setItem("user", JSON.stringify(data.user));
 
-      // Redirigir al dashboard
-      window.location.href = "/dashboard/";
+  // Redirigir a la plantilla de horarios
+  window.location.href = "http://127.0.0.1:8000/api/horarios_template/";
     } else {
       errorDiv.textContent = "Credenciales inválidas";
     }
@@ -35,5 +35,5 @@ document.getElementById("loginForm").addEventListener("submit", async (e) => {
 
 // Verificar si ya está logueado
 if (localStorage.getItem("token")) {
-  window.location.href = "/dashboard/";
+  window.location.href = "http://127.0.0.1:8000/api/horarios_template/";
 }

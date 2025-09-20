@@ -2,137 +2,235 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="{% static 'css/practicante.css' %}">
-  <title>Gestión de Practicantes</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Practicantes - Reflexo</title>
+    <link rel="stylesheet" href="{% static 'css/practicante.css' %}">
 </head>
 <body>
-  <div class="dashboard-layout">
     <!-- Menú lateral -->
     <aside class="sidebar">
-      <div class="sidebar-header">
-        <div class="logo"></div>
-        <span class="brand">Reflexo</span>
-        <span class="subtitle">Horarios & Habilidades</span>
-      </div>
-      <nav class="sidebar-nav">
-        <ul>
-          <li><a href="/api/horarios_template/"><span>📅</span> Horarios (Todos)</a></li>
-          <li><a href="#" class="active"><span>👥</span> Practicantes</a></li>
-          <li><a href="/api/habilidades_template/"><span>🧠</span> Habilidades</a></li>
-          <li><a href="/api/equipos_template/"><span>👥</span> Generar equipos</a></li>
-          <li><a href="#"><span>📤</span> Exportar</a></li>
-        </ul>
-      </nav>
+        <div class="sidebar-header">
+            <div class="logo">📱</div>
+            <span class="brand">Reflexo</span>
+            <span class="subtitle">Horarios & Habilidades</span>
+        </div>
+        <nav class="sidebar-nav">
+            <ul>
+                <li><a href="/api/horarios_template/"><span>📅</span> Horarios (Todos)</a></li>
+                <li><a href="#" class="active"><span>👥</span> Practicantes</a></li>
+                <li><a href="/api/habilidades_template/"><span>🧠</span> Habilidades</a></li>
+                <li><a href="/api/equipos_template/"><span>⚡</span> Generar equipos</a></li>
+                <li><a href="/api/exportar/"><span>📤</span> Exportar</a></li>
+            </ul>
+        </nav>
     </aside>
-    
-    <main class="main-content">
-      <!-- Barra superior -->
-      <nav class="navbar dark">
-        <h1>Gestión de Practicantes</h1>
-        <div class="user-info">
-          <span id="welcomeUser">Administrador</span>
-          <button class="logout-btn" id="logoutBtn">Cerrar Sesión</button>
-        </div>
-      </nav>
-      
-      <!-- Contenido principal -->
-      <div class="content-container">
-        <!-- Panel de acciones -->
-        <div class="action-panel">
-          <button class="btn-primary" id="addPracticanteBtn">+ Añadir Practicante</button>
-          <div class="search-box">
-            <input type="text" id="searchInput" placeholder="Buscar practicantes...">
-            <button class="search-btn">🔍</button>
-          </div>
-        </div>
-        
-        <!-- Modal para añadir/editar practicante -->
-        <div id="practicanteModal" class="modal">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h2 id="modalTitle">Añadir Practicante</h2>
-              <span class="close">&times;</span>
+
+    <!-- Contenido principal -->
+    <div class="main-content">
+        <div class="container">
+            <header class="header">
+                <h1>Gestión de Practicantes</h1>
+                <div class="header-actions">
+                    <button id="btnNuevoPracticante" class="btn btn-primary">
+                        <span>➕</span>
+                        Añadir Practicante
+                    </button>
+                    
+                    <!-- Panel de usuario -->
+                    <div class="user-panel">
+                        <button class="user-btn" id="userBtn">
+                            <span class="user-name" id="userName">Cargando...</span>
+                        </button>
+                        <button class="logout-btn" id="logoutBtn" title="Cerrar Sesión">
+                            Cerrar Sesión
+                        </button>
+                        
+                        <!-- Mini panel de usuario -->
+                        <div class="user-dropdown" id="userDropdown">
+                            <div class="user-info">
+                                <div class="user-avatar">👤</div>
+                                <div class="user-details">
+                                    <div class="user-display-name" id="userDisplayName">-</div>
+                                    <div class="user-email" id="userEmail">-</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Mensajes de notificación -->
+            <div id="notificaciones" class="notifications"></div>
+
+            <!-- Filtros y búsqueda -->
+            <div class="filtros-container">
+                <div class="search-box">
+                    <input type="text" id="buscarPracticante" placeholder="Buscar practicantes..." class="search-input">
+                    <span class="search-icon">🔍</span>
+                </div>
+                
+                <div class="filtros-grid">
+                    <div class="filtro-grupo">
+                        <label for="filtroSemestre">Semestre:</label>
+                        <select id="filtroSemestre" class="select-filtro">
+                            <option value="">Todos</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                            <option value="6">6</option>
+                        </select>
+                    </div>
+                    
+                    <div class="filtro-grupo">
+                        <label for="filtroEstado">Estado:</label>
+                        <select id="filtroEstado" class="select-filtro">
+                            <option value="">Todos</option>
+                            <option value="libre">Libre</option>
+                            <option value="ocupado">Ocupado</option>
+                        </select>
+                    </div>
+                    
+                    <div class="filtro-grupo">
+                        <label for="filtroEspecialidad">Especialidad:</label>
+                        <select id="filtroEspecialidad" class="select-filtro">
+                            <option value="">Todas</option>
+                        </select>
+                    </div>
+                    
+                    <div class="filtro-grupo">
+                        <label for="filtroEquipo">Equipo:</label>
+                        <select id="filtroEquipo" class="select-filtro">
+                            <option value="">Todos</option>
+                            <option value="sin_equipo">Sin equipo</option>
+                        </select>
+                    </div>
+                    
+                    <button id="btnLimpiarFiltros" class="btn btn-outline">
+                        <span>🔄</span>
+                        Limpiar
+                    </button>
+                </div>
             </div>
-            <form id="practicanteForm">
-              <input type="hidden" id="practicanteId">
-              <div class="form-group">
-                <label for="nombre">Nombre:</label>
-                <input type="text" id="nombre" required>
-              </div>
-              <div class="form-group">
-                <label for="apellido">Apellido:</label>
-                <input type="text" id="apellido" required>
-              </div>
-              <div class="form-group">
-                <label for="semestre">Semestre:</label>
-                <input type="number" id="semestre" min="1" max="10" required>
-              </div>
-              <div class="form-group">
-                <label for="sexo">Sexo:</label>
-                <select id="sexo" required>
-                  <option value="">Seleccionar</option>
-                  <option value="M">Masculino</option>
-                  <option value="F">Femenino</option>
-                </select>
-              </div>
-              <div class="form-group">
-                <label for="estado">Estado:</label>
-                <select id="estado" required>
-                  <option value="">Seleccionar</option>
-                  <option value="libre">Libre</option>
-                  <option value="ocupado">Ocupado</option>
-                </select>
-              </div>
-              <div class="form-group">
-                <label for="especialidad">Especialidad:</label>
-                <select id="especialidad" required>
-                  <option value="">Seleccionar</option>
-                  <option value="3">FRONTEND</option>
-                  <option value="2">BACKEND</option>
-                  <option value="1">SCRUM MASTER</option>
-                </select>
-              </div>
-              <div class="form-actions">
-                <button type="submit" class="btn-primary">Guardar</button>
-                <button type="button" class="btn-secondary" id="cancelBtn">Cancelar</button>
-              </div>
+
+            <!-- Tabla de practicantes -->
+            <div class="tabla-container">
+                <div id="loadingPracticantes" class="loading">
+                    <div class="spinner"></div>
+                    <p>Cargando practicantes...</p>
+                </div>
+                
+                <table id="tablaPracticantes" class="tabla-practicantes" style="display: none;">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Nombre</th>
+                            <th>Apellido</th>
+                            <th>Semestre</th>
+                            <th>Sexo</th>
+                            <th>Estado</th>
+                            <th>Especialidad</th>
+                            <th>Equipo</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tablaPracticantesBody">
+                        <!-- Se llena dinámicamente -->
+                    </tbody>
+                </table>
+                
+                <div id="noPracticantes" class="empty-state" style="display: none;">
+                    <div class="empty-icon">👥</div>
+                    <h3>No hay practicantes registrados</h3>
+                    <p>Agrega el primer practicante al sistema</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para crear/editar practicante -->
+    <div id="modalPracticante" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modalTitle">Añadir Nuevo Practicante</h3>
+                <span class="close">&times;</span>
+            </div>
+            <form id="formPracticante">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="nombre">Nombre:</label>
+                        <input type="text" id="nombre" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="apellido">Apellido:</label>
+                        <input type="text" id="apellido" required>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="semestre">Semestre:</label>
+                        <select id="semestre" required>
+                            <option value="">Seleccionar</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                            <option value="6">6</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="sexo">Sexo:</label>
+                        <select id="sexo" required>
+                            <option value="">Seleccionar</option>
+                            <option value="M">Masculino</option>
+                            <option value="F">Femenino</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="estado">Estado:</label>
+                        <select id="estado" required>
+                            <option value="">Seleccionar</option>
+                            <option value="libre">Libre</option>
+                            <option value="ocupado">Ocupado</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="especialidad">Especialidad:</label>
+                        <select id="especialidad" required>
+                            <option value="">Seleccionar</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-cancel" id="btnCancelar">Cancelar</button>
+                    <button type="submit" class="btn btn-primary" id="btnGuardar">Guardar</button>
+                </div>
             </form>
-          </div>
         </div>
-        
-        <!-- Tabla de practicantes -->
-        <div class="table-container">
-          <table id="practicantesTable">
-            <thead>
-              <tr>
-                <th>ID</th>
-                <th>Nombre</th>
-                <th>Apellido</th>
-                <th>Semestre</th>
-                <th>Sexo</th>
-                <th>Estado</th>
-                <th>Especialidad</th>
-                <th>Equipo</th>
-                <th>Acciones</th>
-              </tr>
-            </thead>
-            <tbody id="practicantesTableBody">
-              <!-- Los datos se cargarán dinámicamente -->
-            </tbody>
-          </table>
+    </div>
+
+    <!-- Modal de confirmación -->
+    <div id="modalConfirmar" class="modal">
+        <div class="modal-content modal-small">
+            <div class="modal-header">
+                <h3>Confirmar Eliminación</h3>
+            </div>
+            <p>¿Estás seguro de que deseas eliminar a <strong id="practicanteEliminar"></strong>?</p>
+            <div class="modal-actions">
+                <button type="button" class="btn btn-cancel" id="btnCancelarEliminar">Cancelar</button>
+                <button type="button" class="btn btn-danger" id="btnConfirmarEliminar">Eliminar</button>
+            </div>
         </div>
-        
-        <!-- Mensaje de carga/error -->
-        <div id="messageContainer">
-          <div id="loadingMessage" class="loading">Cargando practicantes...</div>
-          <div id="errorMessage" class="error" style="display: none;"></div>
-        </div>
-      </div>
-    </main>
-  </div>
-  
-  <script src="{% static 'js/practicante.js' %}"></script>
+    </div>
+
+    <script src="{% static 'js/practicante.js' %}"></script>
 </body>
 </html>

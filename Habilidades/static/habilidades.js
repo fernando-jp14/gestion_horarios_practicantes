@@ -155,11 +155,11 @@ async function cerrarSesion() {
     try {
         await makeAPIRequest('/logout/', { method: 'POST' });
         localStorage.removeItem('token');
-        window.location.href = 'http://127.0.0.1:8000/login/';
+        window.location.href = 'http://127.0.0.1:8000/';
     } catch (error) {
         console.error('Error cerrando sesión:', error);
         localStorage.removeItem('token');
-        window.location.href = 'http://127.0.0.1:8000/login/';
+        window.location.href = 'http://127.0.0.1:8000/';
     }
 }
 

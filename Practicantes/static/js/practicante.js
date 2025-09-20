@@ -1,268 +1,516 @@
-const API_BASE = "http://127.0.0.1:8000";
-let practicantes = [];
+// Configuración de la API
+const API_BASE_URL = 'http://127.0.0.1:8000/api';
+
+// Estado global
+const appState = {
+    practicantes: [],
+    practicantesOriginales: [],
+    especialidades: [],
+    equipos: [],
+    editingPracticante: null,
+    token: localStorage.getItem('token') || '',
+    user: null
+};
 
 // Elementos del DOM
-const modal = document.getElementById("practicanteModal");
-const form = document.getElementById("practicanteForm");
-const tableBody = document.getElementById("practicantesTableBody");
-const addBtn = document.getElementById("addPracticanteBtn");
-const cancelBtn = document.getElementById("cancelBtn");
-const closeBtn = document.querySelector(".close");
-const loadingMessage = document.getElementById("loadingMessage");
-const errorMessage = document.getElementById("errorMessage");
-const searchInput = document.getElementById("searchInput");
+const elements = {
+    loadingPracticantes: document.getElementById('loadingPracticantes'),
+    tablaPracticantes: document.getElementById('tablaPracticantes'),
+    tablaPracticantesBody: document.getElementById('tablaPracticantesBody'),
+    noPracticantes: document.getElementById('noPracticantes'),
+    notificaciones: document.getElementById('notificaciones'),
+    
+    // Filtros
+    buscarPracticante: document.getElementById('buscarPracticante'),
+    filtroSemestre: document.getElementById('filtroSemestre'),
+    filtroEstado: document.getElementById('filtroEstado'),
+    filtroEspecialidad: document.getElementById('filtroEspecialidad'),
+    filtroEquipo: document.getElementById('filtroEquipo'),
+    btnLimpiarFiltros: document.getElementById('btnLimpiarFiltros'),
+    
+    // Modal practicante
+    modalPracticante: document.getElementById('modalPracticante'),
+    modalTitle: document.getElementById('modalTitle'),
+    formPracticante: document.getElementById('formPracticante'),
+    nombre: document.getElementById('nombre'),
+    apellido: document.getElementById('apellido'),
+    semestre: document.getElementById('semestre'),
+    sexo: document.getElementById('sexo'),
+    estado: document.getElementById('estado'),
+    especialidad: document.getElementById('especialidad'),
+    
+    // Modal confirmación
+    modalConfirmar: document.getElementById('modalConfirmar'),
+    practicanteEliminar: document.getElementById('practicanteEliminar'),
+    
+    // Botones
+    btnNuevoPracticante: document.getElementById('btnNuevoPracticante'),
+    btnGuardar: document.getElementById('btnGuardar'),
+    btnCancelar: document.getElementById('btnCancelar'),
+    btnConfirmarEliminar: document.getElementById('btnConfirmarEliminar'),
+    btnCancelarEliminar: document.getElementById('btnCancelarEliminar')
+};
 
-// Inicializar la aplicación
-document.addEventListener("DOMContentLoaded", function() {
-  loadPracticantes();
-  setupEventListeners();
+// Inicialización
+document.addEventListener('DOMContentLoaded', function() {
+    inicializarEventListeners();
+    cargarPerfilUsuario();
+    cargarDatos();
 });
 
-// Configurar event listeners
-function setupEventListeners() {
-  addBtn.addEventListener("click", () => openModal());
-  cancelBtn.addEventListener("click", () => closeModal());
-  closeBtn.addEventListener("click", () => closeModal());
-  
-  form.addEventListener("submit", function(e) {
-    e.preventDefault();
-    savePracticante();
-  });
-  
-  searchInput.addEventListener("input", function() {
-    filterPracticantes(this.value);
-  });
-  
-  // Cerrar modal al hacer clic fuera
-  window.addEventListener("click", function(e) {
-    if (e.target === modal) {
-      closeModal();
-    }
-  });
-}
-
-// Función auxiliar para obtener el token guardado en localStorage
-function getAuthToken() {
-  // Recupera el token guardado tras el login
-  return localStorage.getItem("token");
-}
-
-// Cargar todos los practicantes (incluye el token en el header Authorization)
-async function loadPracticantes() {
-  showLoading();
-  try {
-    const token = getAuthToken();
-    const response = await fetch(`${API_BASE}/api/practicantes/`, {
-      headers: {
-        // Si tienes un token, lo agregas al header Authorization
-        ...(token ? { "Authorization": "Token " + token } : {})
-      }
+function inicializarEventListeners() {
+    // Usuario
+    const userBtn = document.getElementById('userBtn');
+    const logoutBtn = document.getElementById('logoutBtn');
+    const userDropdown = document.getElementById('userDropdown');
+    
+    userBtn.addEventListener('click', () => {
+        userDropdown.classList.toggle('show');
     });
-    if (response.ok) {
-      practicantes = await response.json();
-      renderPracticantes(practicantes);
-      hideMessages();
-    } else {
-      throw new Error("Error al cargar los practicantes");
-    }
-  } catch (error) {
-    showError("No se pudieron cargar los practicantes: " + error.message);
-  }
-}
-
-// Renderizar practicantes en la tabla
-function renderPracticantes(data) {
-  tableBody.innerHTML = "";
-  
-  if (data.length === 0) {
-    tableBody.innerHTML = `
-      <tr>
-        <td colspan="9" style="text-align: center; color: #a0aec0;">
-          No se encontraron practicantes
-        </td>
-      </tr>
-    `;
-    return;
-  }
-  
-  data.forEach(practicante => {
-    const row = document.createElement("tr");
     
-    row.innerHTML = `
-      <td>${practicante.id}</td>
-      <td>${practicante.nombre}</td>
-      <td>${practicante.apellido}</td>
-      <td>${practicante.semestre}</td>
-      <td>${practicante.sexo === 'M' ? 'Masculino' : 'Femenino'}</td>
-      <td><span class="status-badge status-${practicante.estado}">${practicante.estado}</span></td>
-      <td>${practicante.name_especialidad || 'Especialidad ' + practicante.especialidad}</td>
-      <td>${practicante.equipo || 'Ninguno'}</td>
-      <td>
-        <div class="action-buttons">
-          <button class="btn-edit" onclick="editPracticante(${practicante.id})">Editar</button>
-          <button class="btn-delete" onclick="deletePracticante(${practicante.id})">Eliminar</button>
-        </div>
-      </td>
-    `;
+    logoutBtn.addEventListener('click', cerrarSesion);
     
-    tableBody.appendChild(row);
-  });
+    document.addEventListener('click', (e) => {
+        if (!userBtn.contains(e.target) && !userDropdown.contains(e.target)) {
+            userDropdown.classList.remove('show');
+        }
+    });
+    
+    // Botones principales
+    elements.btnNuevoPracticante.addEventListener('click', abrirModalNuevoPracticante);
+    
+    // Filtros
+    elements.buscarPracticante.addEventListener('input', aplicarFiltros);
+    elements.filtroSemestre.addEventListener('change', aplicarFiltros);
+    elements.filtroEstado.addEventListener('change', aplicarFiltros);
+    elements.filtroEspecialidad.addEventListener('change', aplicarFiltros);
+    elements.filtroEquipo.addEventListener('change', aplicarFiltros);
+    elements.btnLimpiarFiltros.addEventListener('click', limpiarFiltros);
+    
+    // Modal practicante
+    elements.formPracticante.addEventListener('submit', guardarPracticante);
+    elements.btnCancelar.addEventListener('click', cerrarModalPracticante);
+    
+    // Modal confirmación
+    elements.btnConfirmarEliminar.addEventListener('click', confirmarEliminarPracticante);
+    elements.btnCancelarEliminar.addEventListener('click', cerrarModalConfirmar);
+    
+    // Cerrar modales
+    document.querySelectorAll('.close').forEach(closeBtn => {
+        closeBtn.addEventListener('click', (e) => {
+            e.target.closest('.modal').style.display = 'none';
+        });
+    });
+    
+    window.addEventListener('click', (e) => {
+        if (e.target.classList.contains('modal')) {
+            e.target.style.display = 'none';
+        }
+    });
 }
 
-// Filtrar practicantes
-function filterPracticantes(searchTerm) {
-  if (!searchTerm) {
-    renderPracticantes(practicantes);
-    return;
-  }
-  
-  const filtered = practicantes.filter(p => 
-    p.nombre.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    p.apellido.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    p.name_especialidad.toLowerCase().includes(searchTerm.toLowerCase())
-  );
-  
-  renderPracticantes(filtered);
-}
-
-// Abrir modal para añadir/editar
-function openModal(practicante = null) {
-  const modalTitle = document.getElementById("modalTitle");
-  const form = document.getElementById("practicanteForm");
-  
-  if (practicante) {
-    modalTitle.textContent = "Editar Practicante";
-    document.getElementById("practicanteId").value = practicante.id;
-    document.getElementById("nombre").value = practicante.nombre;
-    document.getElementById("apellido").value = practicante.apellido;
-    document.getElementById("semestre").value = practicante.semestre;
-    document.getElementById("sexo").value = practicante.sexo;
-    document.getElementById("estado").value = practicante.estado;
-    document.getElementById("especialidad").value = practicante.especialidad;
-  } else {
-    modalTitle.textContent = "Añadir Practicante";
-    form.reset();
-    document.getElementById("practicanteId").value = "";
-  }
-  
-  modal.style.display = "block";
-}
-
-// Cerrar modal
-function closeModal() {
-  modal.style.display = "none";
-  form.reset();
-}
-
-// Guardar practicante (crear o actualizar)
-// Incluye el token en el header Authorization
-async function savePracticante() {
-  const id = document.getElementById("practicanteId").value;
-  const practicanteData = {
-    nombre: document.getElementById("nombre").value,
-    apellido: document.getElementById("apellido").value,
-    semestre: document.getElementById("semestre").value,
-    sexo: document.getElementById("sexo").value,
-    estado: document.getElementById("estado").value,
-    especialidad: document.getElementById("especialidad").value,
-    equipo: null
-  };
-  try {
-    const token = getAuthToken();
-    let response;
-    const headers = {
-      'Content-Type': 'application/json',
-      // Agrega el token si existe
-      ...(token ? { "Authorization": "Token " + token } : {})
+// Funciones de API
+async function makeAPIRequest(endpoint, options = {}) {
+    const defaultOptions = {
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Token ${appState.token}`
+        }
     };
-    if (id) {
-      // Actualizar practicante existente
-      response = await fetch(`${API_BASE}/api/practicantes/${id}/`, {
-        method: 'PUT',
-        headers,
-        body: JSON.stringify(practicanteData)
-      });
+
+    const finalOptions = {
+        ...defaultOptions,
+        ...options,
+        headers: {
+            ...defaultOptions.headers,
+            ...options.headers
+        }
+    };
+
+    // Si el endpoint es /profile/ o /logout/, no usar API_BASE_URL
+    let url;
+    if (endpoint === '/profile/' || endpoint === '/logout/') {
+        url = `http://127.0.0.1:8000${endpoint}`;
     } else {
-      // Crear nuevo practicante
-      response = await fetch(`${API_BASE}/api/practicantes/`, {
-        method: 'POST',
-        headers,
-        body: JSON.stringify(practicanteData)
-      });
+        url = `${API_BASE_URL}${endpoint}`;
     }
-    if (response.ok) {
-      closeModal();
-      loadPracticantes(); // Recargar la lista
-    } else {
-      const errorData = await response.json();
-      throw new Error(errorData.message || "Error al guardar el practicante");
+
+    try {
+        const response = await fetch(url, finalOptions);
+
+        if (!response.ok) {
+            const errorData = await response.text();
+            throw new Error(`HTTP ${response.status}: ${errorData}`);
+        }
+
+        const contentType = response.headers.get('content-type');
+        if (contentType && contentType.includes('application/json')) {
+            return await response.json();
+        }
+
+        return await response.text();
+    } catch (error) {
+        console.error('Error en API request:', error);
+        throw error;
     }
-  } catch (error) {
-    showError("Error: " + error.message);
-  }
 }
 
-// Editar practicante
-// Incluye el token en el header Authorization
-async function editPracticante(id) {
-  try {
-    const token = getAuthToken();
-    const response = await fetch(`${API_BASE}/api/practicantes/${id}/`, {
-      headers: {
-        ...(token ? { "Authorization": "Token " + token } : {})
-      }
+// Funciones de usuario
+async function cargarPerfilUsuario() {
+    try {
+        const profile = await makeAPIRequest('/profile/');
+        appState.user = profile.user;
+        
+        document.getElementById('userName').textContent = profile.user.username;
+        document.getElementById('userDisplayName').textContent = profile.user.username;
+        document.getElementById('userEmail').textContent = profile.user.email;
+    } catch (error) {
+        console.error('Error cargando perfil:', error);
+        document.getElementById('userName').textContent = 'Error';
+    }
+}
+
+async function cerrarSesion() {
+    try {
+        await makeAPIRequest('/logout/', { method: 'POST' });
+        localStorage.removeItem('authToken');
+        window.location.href = 'http://127.0.0.1:8000/';
+    } catch (error) {
+        console.error('Error cerrando sesión:', error);
+        localStorage.removeItem('authToken');
+        window.location.href = 'http://127.0.0.1:8000/';
+    }
+}
+
+// Funciones de datos
+async function cargarPracticantes() {
+    try {
+        elements.loadingPracticantes.style.display = 'flex';
+        elements.tablaPracticantes.style.display = 'none';
+        elements.noPracticantes.style.display = 'none';
+        
+        const practicantes = await makeAPIRequest('/practicantes/');
+        appState.practicantes = practicantes;
+        appState.practicantesOriginales = [...practicantes];
+        
+        renderizarTabla();
+        
+    } catch (error) {
+        mostrarNotificacion('Error al cargar los practicantes: ' + error.message, 'error');
+        console.error('Error cargando practicantes:', error);
+    } finally {
+        elements.loadingPracticantes.style.display = 'none';
+    }
+}
+
+async function cargarEspecialidades() {
+    try {
+        const especialidades = await makeAPIRequest('/especialidades/');
+        appState.especialidades = especialidades;
+        
+        // Llenar select de especialidades en filtro
+        elements.filtroEspecialidad.innerHTML = '<option value="">Todas</option>';
+        especialidades.forEach(esp => {
+            const option = document.createElement('option');
+            option.value = esp.id;
+            option.textContent = esp.nombre;
+            elements.filtroEspecialidad.appendChild(option);
+        });
+        
+        // Llenar select de especialidades en modal
+        elements.especialidad.innerHTML = '<option value="">Seleccionar</option>';
+        especialidades.forEach(esp => {
+            const option = document.createElement('option');
+            option.value = esp.id;
+            option.textContent = esp.nombre;
+            elements.especialidad.appendChild(option);
+        });
+        
+    } catch (error) {
+        mostrarNotificacion('Error al cargar especialidades: ' + error.message, 'error');
+        console.error('Error cargando especialidades:', error);
+    }
+}
+
+async function cargarEquipos() {
+    try {
+        const equipos = await makeAPIRequest('/equipos/');
+        appState.equipos = equipos;
+        
+        // Llenar select de equipos en filtro
+        elements.filtroEquipo.innerHTML = '<option value="">Todos</option><option value="sin_equipo">Sin equipo</option>';
+        equipos.forEach(eq => {
+            const option = document.createElement('option');
+            option.value = eq.id;
+            option.textContent = eq.nombre;
+            elements.filtroEquipo.appendChild(option);
+        });
+        
+    } catch (error) {
+        console.error('Error cargando equipos:', error);
+    }
+}
+
+async function cargarDatos() {
+    await Promise.all([cargarPracticantes(), cargarEspecialidades(), cargarEquipos()]);
+}
+
+// Funciones de renderizado
+function renderizarTabla() {
+    const tbody = elements.tablaPracticantesBody;
+    
+    if (appState.practicantes.length === 0) {
+        elements.tablaPracticantes.style.display = 'none';
+        elements.noPracticantes.style.display = 'block';
+        return;
+    }
+    
+    elements.tablaPracticantes.style.display = 'table';
+    elements.noPracticantes.style.display = 'none';
+    
+    tbody.innerHTML = appState.practicantes.map(practicante => `
+        <tr>
+            <td>${practicante.id}</td>
+            <td>${practicante.nombre}</td>
+            <td>${practicante.apellido}</td>
+            <td>${practicante.semestre}</td>
+            <td>${practicante.sexo === 'M' ? 'Masculino' : 'Femenino'}</td>
+            <td>
+                <span class="estado-tag ${practicante.estado}">
+                    ${practicante.estado}
+                </span>
+            </td>
+            <td>${practicante.name_especialidad}</td>
+            <td>
+                <span class="equipo-tag ${practicante.nombre_equipo ? '' : 'ninguno'}">
+                    ${practicante.nombre_equipo || 'Ninguno'}
+                </span>
+            </td>
+            <td>
+                <div style="display: flex; gap: 0.5rem;">
+                    <button class="btn btn-small btn-secondary" onclick="editarPracticante(${practicante.id})" title="Editar">
+                        Editar
+                    </button>
+                    <button class="btn btn-small btn-danger" onclick="eliminarPracticante(${practicante.id}, '${practicante.nombre} ${practicante.apellido}')" title="Eliminar">
+                        Eliminar
+                    </button>
+                </div>
+            </td>
+        </tr>
+    `).join('');
+}
+
+// Funciones de filtros
+function aplicarFiltros() {
+    const busqueda = elements.buscarPracticante.value.toLowerCase().trim();
+    const filtroSemestre = elements.filtroSemestre.value;
+    const filtroEstado = elements.filtroEstado.value;
+    const filtroEspecialidad = elements.filtroEspecialidad.value;
+    const filtroEquipo = elements.filtroEquipo.value;
+    
+    appState.practicantes = appState.practicantesOriginales.filter(practicante => {
+        // Filtro de búsqueda por nombre y apellido
+        const coincideBusqueda = !busqueda || 
+            practicante.nombre.toLowerCase().includes(busqueda) ||
+            practicante.apellido.toLowerCase().includes(busqueda);
+        
+        // Filtro por semestre
+        const coincideSemestre = !filtroSemestre || practicante.semestre === filtroSemestre;
+        
+        // Filtro por estado
+        const coincideEstado = !filtroEstado || practicante.estado === filtroEstado;
+        
+        // Filtro por especialidad
+        const coincideEspecialidad = !filtroEspecialidad || practicante.especialidad.toString() === filtroEspecialidad;
+        
+        // Filtro por equipo
+        let coincideEquipo = true;
+        if (filtroEquipo) {
+            if (filtroEquipo === 'sin_equipo') {
+                coincideEquipo = !practicante.equipo;
+            } else {
+                coincideEquipo = practicante.equipo && practicante.equipo.toString() === filtroEquipo;
+            }
+        }
+        
+        return coincideBusqueda && coincideSemestre && coincideEstado && coincideEspecialidad && coincideEquipo;
     });
-    if (response.ok) {
-      const practicante = await response.json();
-      openModal(practicante);
-    } else {
-      throw new Error("No se pudo cargar el practicante para editar");
-    }
-  } catch (error) {
-    showError("Error: " + error.message);
-  }
+    
+    renderizarTabla();
 }
 
-// Eliminar practicante
-// Incluye el token en el header Authorization
-async function deletePracticante(id) {
-  if (!confirm("¿Estás seguro de que deseas eliminar este practicante?")) {
-    return;
-  }
-  try {
-    const token = getAuthToken();
-    const response = await fetch(`${API_BASE}/api/practicantes/${id}/`, {
-      method: 'DELETE',
-      headers: {
-        ...(token ? { "Authorization": "Token " + token } : {})
-      }
+function limpiarFiltros() {
+    elements.buscarPracticante.value = '';
+    elements.filtroSemestre.value = '';
+    elements.filtroEstado.value = '';
+    elements.filtroEspecialidad.value = '';
+    elements.filtroEquipo.value = '';
+    appState.practicantes = [...appState.practicantesOriginales];
+    renderizarTabla();
+}
+
+// Funciones del modal
+function abrirModalNuevoPracticante() {
+    appState.editingPracticante = null;
+    elements.modalTitle.textContent = 'Añadir Nuevo Practicante';
+    
+    // Limpiar formulario
+    elements.nombre.value = '';
+    elements.apellido.value = '';
+    elements.semestre.value = '';
+    elements.sexo.value = '';
+    elements.estado.value = '';
+    elements.especialidad.value = '';
+    
+    elements.modalPracticante.style.display = 'block';
+}
+
+async function editarPracticante(id) {
+    try {
+        const practicante = await makeAPIRequest(`/practicantes/${id}/`);
+        appState.editingPracticante = practicante;
+        
+        elements.modalTitle.textContent = 'Editar Practicante';
+        elements.nombre.value = practicante.nombre;
+        elements.apellido.value = practicante.apellido;
+        elements.semestre.value = practicante.semestre;
+        elements.sexo.value = practicante.sexo;
+        elements.estado.value = practicante.estado;
+        elements.especialidad.value = practicante.especialidad;
+        
+        elements.modalPracticante.style.display = 'block';
+        
+    } catch (error) {
+        mostrarNotificacion('Error al cargar practicante: ' + error.message, 'error');
+    }
+}
+
+function cerrarModalPracticante() {
+    elements.modalPracticante.style.display = 'none';
+    appState.editingPracticante = null;
+}
+
+async function guardarPracticante(e) {
+    e.preventDefault();
+    
+    const data = {
+        nombre: elements.nombre.value.trim(),
+        apellido: elements.apellido.value.trim(),
+        semestre: elements.semestre.value,
+        sexo: elements.sexo.value,
+        estado: elements.estado.value,
+        especialidad: parseInt(elements.especialidad.value)
+    };
+    
+    // Validaciones
+    if (!data.nombre || !data.apellido || !data.semestre || !data.sexo || !data.estado || !data.especialidad) {
+        mostrarNotificacion('Todos los campos son obligatorios', 'error');
+        return;
+    }
+    
+    try {
+        elements.btnGuardar.disabled = true;
+        elements.btnGuardar.textContent = 'Guardando...';
+        
+        if (appState.editingPracticante) {
+            await makeAPIRequest(`/practicantes/${appState.editingPracticante.id}/`, {
+                method: 'PUT',
+                body: JSON.stringify(data)
+            });
+            mostrarNotificacion('Practicante actualizado correctamente', 'success');
+        } else {
+            await makeAPIRequest('/practicantes/', {
+                method: 'POST',
+                body: JSON.stringify(data)
+            });
+            mostrarNotificacion('Practicante creado correctamente', 'success');
+        }
+        
+        cerrarModalPracticante();
+        await cargarPracticantes();
+        
+    } catch (error) {
+        mostrarNotificacion('Error al guardar el practicante: ' + error.message, 'error');
+    } finally {
+        elements.btnGuardar.disabled = false;
+        elements.btnGuardar.textContent = 'Guardar';
+    }
+}
+
+// Funciones de eliminación
+function eliminarPracticante(id, nombre) {
+    appState.practicanteAEliminar = id;
+    elements.practicanteEliminar.textContent = nombre;
+    elements.modalConfirmar.style.display = 'block';
+}
+
+function cerrarModalConfirmar() {
+    elements.modalConfirmar.style.display = 'none';
+    appState.practicanteAEliminar = null;
+}
+
+async function confirmarEliminarPracticante() {
+    if (!appState.practicanteAEliminar) return;
+    
+    try {
+        elements.btnConfirmarEliminar.disabled = true;
+        elements.btnConfirmarEliminar.textContent = 'Eliminando...';
+        
+        await makeAPIRequest(`/practicantes/${appState.practicanteAEliminar}/`, {
+            method: 'DELETE'
+        });
+        
+        mostrarNotificacion('Practicante eliminado correctamente', 'success');
+        cerrarModalConfirmar();
+        await cargarPracticantes();
+        
+    } catch (error) {
+        mostrarNotificacion('Error al eliminar el practicante: ' + error.message, 'error');
+    } finally {
+        elements.btnConfirmarEliminar.disabled = false;
+        elements.btnConfirmarEliminar.textContent = 'Eliminar';
+    }
+}
+
+// Funciones de utilidad
+function mostrarNotificacion(mensaje, tipo = 'info') {
+    const notificacion = document.createElement('div');
+    notificacion.className = `notification ${tipo}`;
+    
+    const iconos = {
+        success: '✅',
+        error: '❌',
+        warning: '⚠️',
+        info: 'ℹ️'
+    };
+    
+    notificacion.innerHTML = `
+        <span>${iconos[tipo] || iconos.info}</span>
+        <span>${mensaje}</span>
+    `;
+    
+    elements.notificaciones.appendChild(notificacion);
+    
+    setTimeout(() => {
+        if (notificacion.parentNode) {
+            notificacion.remove();
+        }
+    }, 5000);
+    
+    notificacion.addEventListener('click', () => {
+        notificacion.remove();
     });
-    if (response.ok) {
-      loadPracticantes(); // Recargar la lista
-    } else {
-      throw new Error("No se pudo eliminar el practicante");
+}
+
+function verificarToken() {
+    if (!appState.token) {
+        mostrarNotificacion('Token de autenticación no encontrado. Por favor, inicia sesión.', 'error');
+        return false;
     }
-  } catch (error) {
-    showError("Error: " + error.message);
-  }
+    return true;
 }
 
-// Mostrar mensaje de carga
-function showLoading() {
-  loadingMessage.style.display = "block";
-  errorMessage.style.display = "none";
-  tableBody.innerHTML = "";
-}
-
-// Mostrar mensaje de error
-function showError(message) {
-  loadingMessage.style.display = "none";
-  errorMessage.style.display = "block";
-  errorMessage.textContent = message;
-}
-
-// Ocultar mensajes
-function hideMessages() {
-  loadingMessage.style.display = "none";
-  errorMessage.style.display = "none";
+// Verificar token al inicio
+if (!verificarToken()) {
+    console.warn('Token no válido o no encontrado');
 }

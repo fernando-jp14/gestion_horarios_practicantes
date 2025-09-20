@@ -1,15 +1,27 @@
+from .models import Practicante, Equipo, Especialidad
 from rest_framework import serializers
-from .models import Practicante, Equipo
+
+class EspecialidadSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Especialidad
+        fields = ["id", "nombre"]
 
 class PracticanteSerializer(serializers.ModelSerializer):
     name_especialidad = serializers.SerializerMethodField()
+    nombre_equipo = serializers.SerializerMethodField()
 
     class Meta:
         model = Practicante
-        fields = ["id", "nombre", "apellido", "semestre", "sexo", "estado", "especialidad", "name_especialidad", "equipo"]
+        fields = [
+            "id", "nombre", "apellido", "semestre", "sexo", "estado", "especialidad",
+            "name_especialidad", "equipo", "nombre_equipo"
+        ]
 
     def get_name_especialidad(self, obj):
         return obj.especialidad.nombre if obj.especialidad else None
+
+    def get_nombre_equipo(self, obj):
+        return obj.equipo.nombre if obj.equipo else None
     
 
 # Serializer para mostrar practicantes dentro de un equipo (solo los campos requeridos)
