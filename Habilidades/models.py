@@ -6,6 +6,9 @@ from django.core.validators import MinValueValidator, MaxValueValidator
 class Habilidad(models.Model):
     nombre = models.CharField(max_length=100, blank=False)
 
+    class Meta:
+        ordering = ['id']
+
     def __str__(self):
         return self.nombre
 

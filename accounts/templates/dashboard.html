@@ -20,11 +20,15 @@
       </div>
       <nav class="sidebar-nav">
         <ul>
-          <li><a href="#" class="active"><span>📅</span> Horarios (Todos)</a></li>
+          <li><a href="/api/horarios_template/" class="active"><span>📅</span> Horarios (Todos)</a></li>
           <a href="/api/practicante_template/"><span>👥</span> Practicantes</a>
-          <li><a href="#"><span>🧠</span> Habilidades</a></li>
-          <li><a href="#"><span>👥</span> Generar equipos</a></li>
-          <li><a href="#"><span>📤</span> Exportar</a></li>
+          <li><a href="/api/habilidades_template/"><span>🧠</span> Habilidades</a></li>
+          <li><a href="/api/equipos_template/"><span>👥</span> Generar equipos</a></li>
+          <li>
+            <button id="exportarExcelBtn" style="width:100%;background:none;border:none;padding:0;text-align:left;cursor:pointer;font:inherit;">
+              <span>📤</span> Exportar Excel
+            </button>
+          </li>
         </ul>
         <div class="sidebar-note">Maquetación HTML+CSS (sin JS). Los botones son placeholders.</div>
       </nav>
@@ -32,7 +36,6 @@
     <main class="main-content">
       <!-- Barra superior -->
       <nav class="navbar dark">
-        <h1>Dashboard</h1>
         <div class="user-info">
           <!-- Botón de usuario que despliega el perfil -->
           <div class="user-dropdown">
@@ -50,14 +53,7 @@
           <button class="logout-btn" id="logoutBtn">Cerrar Sesión</button>
         </div>
       </nav>
-      
-      <!-- Contenido principal -->
-      <div class="dashboard-content">
-        <div class="main-card">
-          <h2>Bienvenido al Dashboard</h2>
-          <p>Selecciona una opción del menú lateral para comenzar.</p>
-        </div>
-      </div>
+  
     </main>
   </div>
   <script src="{% static 'js/dashboard.js' %}"></script>

@@ -1,132 +1,132 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="{% static 'habilidades.css' %}">
-  <title>Gestión de Habilidades</title>
+  <title>Gestión de Habilidades - Reflexo</title>
+  <link rel="stylesheet" href="{% static '/habilidades.css' %}">
 </head>
+
 <body>
-  <div class="dashboard-layout">
-    <!-- Menú lateral -->
-    <aside class="sidebar">
-      <div class="sidebar-header">
-        <div class="logo"></div>
-        <span class="brand">Reflexo</span>
-        <span class="subtitle">Horarios & Habilidades</span>
-      </div>
-      <nav class="sidebar-nav">
-        <ul>
-          <li><a href="#"><span>📅</span> Horarios (Todos)</a></li>
-          <li><a href="/practicantes"><span>👥</span> Practicantes</a></li>
-          <li><a href="#" class="active"><span>🧠</span> Habilidades</a></li>
-          <li><a href="#"><span>👥</span> Generar equipos</a></li>
-          <li><a href="#"><span>📤</span> Exportar</a></li>
-        </ul>
-      </nav>
-    </aside>
-    
-    <main class="main-content">
-      <!-- Barra superior -->
-      <nav class="navbar dark">
+  <!-- Menú lateral -->
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <div class="logo">📱</div>
+      <span class="brand">Reflexo</span>
+      <span class="subtitle">Horarios & Habilidades</span>
+    </div>
+    <nav class="sidebar-nav">
+      <ul>
+        <li><a href="/api/horarios_template/"><span>📅</span> Horarios (Todos)</a></li>
+        <li><a href="/api/practicante_template/"><span>👥</span> Practicantes</a></li>
+        <li><a href="#" class="active"><span>🧠</span> Habilidades</a></li>
+        <li><a href="/api/equipos_template/"><span>⚡</span> Generar equipos</a></li>
+        <li><a href="/api/exportar/"><span>📤</span> Exportar</a></li>
+      </ul>
+    </nav>
+  </aside>
+
+  <!-- Contenido principal -->
+  <div class="main-content">
+    <div class="container">
+      <header class="header">
         <h1>Gestión de Habilidades</h1>
-        <div class="user-info">
-          <span id="welcomeUser">Administrador</span>
-          <button class="logout-btn" id="logoutBtn">Cerrar Sesión</button>
-        </div>
-      </nav>
-      
-      <!-- Contenido principal -->
-      <div class="content-container">
-        <!-- Panel de acciones -->
-        <div class="action-panel">
-          <button class="btn-primary" id="addHabilidadBtn">+ Añadir Habilidad</button>
-          <div class="view-toggle">
-            <button class="toggle-btn active" data-view="practicantes">Vista por Practicantes</button>
-            <button class="toggle-btn" data-view="habilidades">Vista por Habilidades</button>
-          </div>
-        </div>
-        
-        <!-- Modal para añadir/editar habilidad -->
-        <div id="habilidadModal" class="modal">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h2 id="modalTitle">Añadir Habilidad</h2>
-              <span class="close">&times;</span>
+        <div class="header-actions">
+          <!-- Panel de usuario -->
+          <div class="user-panel">
+            <button class="user-btn" id="userBtn">
+              <span class="user-icon">👤</span>
+              <span class="user-name" id="userName">Cargando...</span>
+            </button>
+            <button class="logout-btn" id="logoutBtn" title="Cerrar sesión">
+              <span>🚪</span>
+            </button>
+
+            <!-- Mini panel de usuario -->
+            <div class="user-dropdown" id="userDropdown">
+              <div class="user-info">
+                <div class="user-avatar">👤</div>
+                <div class="user-details">
+                  <div class="user-display-name" id="userDisplayName">-</div>
+                  <div class="user-email" id="userEmail">-</div>
+                </div>
+              </div>
             </div>
-            <form id="habilidadForm">
-              <input type="hidden" id="habilidadId">
-              <div class="form-group">
-                <label for="practicante">Practicante:</label>
-                <select id="practicante" required>
-                  <option value="">Seleccionar practicante</option>
-                  <!-- Los practicantes se cargarán dinámicamente -->
-                </select>
-              </div>
-              <div class="form-group">
-                <label for="habilidad">Habilidad:</label>
-                <select id="habilidad" required>
-                  <option value="">Seleccionar habilidad</option>
-                  <option value="1">JavaScript</option>
-                  <option value="2">React</option>
-                  <option value="3">Figma</option>
-                  <option value="4">Python</option>
-                  <option value="5">Django</option>
-                  <option value="6">Docker</option>
-                  <option value="7">MySQL</option>
-                  <option value="8">PHP</option>
-                  <option value="9">Laravel</option>
-                </select>
-              </div>
-              <div class="form-group">
-                <label for="puntaje">Puntaje (1-10):</label>
-                <input type="number" id="puntaje" min="1" max="10" required>
-              </div>
-              <div class="form-actions">
-                <button type="submit" class="btn-primary">Guardar</button>
-                <button type="button" class="btn-secondary" id="cancelBtn">Cancelar</button>
-              </div>
-            </form>
           </div>
         </div>
-        
-        <!-- Vista por practicantes -->
-        <div id="practicantesView" class="view-content active">
-          <div class="practicantes-container">
-            <!-- Los practicantes se cargarán dinámicamente -->
-          </div>
-        </div>
-        
-        <!-- Vista por habilidades -->
-        <div id="habilidadesView" class="view-content">
-          <div class="table-container">
-            <table id="habilidadesTable">
-              <thead>
-                <tr>
-                  <th>ID</th>
-                  <th>Practicante</th>
-                  <th>Habilidad</th>
-                  <th>Puntaje</th>
-                  <th>Acciones</th>
-                </tr>
-              </thead>
-              <tbody id="habilidadesTableBody">
-                <!-- Los datos se cargarán dinámicamente -->
-              </tbody>
-            </table>
-          </div>
-        </div>
-        
-        <!-- Mensaje de carga/error -->
-        <div id="messageContainer">
-          <div id="loadingMessage" class="loading">Cargando habilidades...</div>
-          <div id="errorMessage" class="error" style="display: none;"></div>
+      </header>
+
+      <!-- Mensajes de notificación -->
+      <div id="notificaciones" class="notifications"></div>
+
+      <!-- Selector de practicante -->
+      <div class="practicante-selector">
+        <div class="selector-header">
+          <h3>Selecciona un Practicante</h3>
+          <select id="practicanteSelect" class="select-practicante">
+            <option value="">-- Seleccionar Practicante --</option>
+          </select>
         </div>
       </div>
-    </main>
+
+      <!-- Contenedor de habilidades -->
+      <div class="habilidades-container" id="habilidadesContainer" style="display: none;">
+        <div class="habilidades-header">
+          <h3 id="practicanteNombre">Habilidades de -</h3>
+          <div class="habilidades-actions">
+            <button id="btnGuardar" class="btn btn-primary">
+              <span>💾</span>
+              Guardar Cambios
+            </button>
+            <button id="btnReemplazar" class="btn btn-warning">
+              <span>🔄</span>
+              Reemplazar Todo
+            </button>
+            <button id="btnEliminar" class="btn btn-danger">
+              <span>🗑️</span>
+              Eliminar Todo
+            </button>
+          </div>
+        </div>
+
+        <!-- Grid de habilidades -->
+        <div class="habilidades-grid" id="habilidadesGrid">
+          <!-- Se llena dinámicamente -->
+        </div>
+      </div>
+
+      <!-- Estado vacío -->
+      <div id="estadoVacio" class="empty-state">
+        <div class="empty-icon">🧠</div>
+        <h3>Selecciona un practicante</h3>
+        <p>Elige un practicante de la lista para gestionar sus habilidades</p>
+      </div>
+
+      <!-- Loading -->
+      <div id="loading" class="loading" style="display: none;">
+        <div class="spinner"></div>
+        <p>Cargando habilidades...</p>
+      </div>
+    </div>
   </div>
-  
-  <script src="{% static 'habilidades.js' %}"></script>
+
+  <!-- Modal de confirmación -->
+  <div id="modalConfirmar" class="modal">
+    <div class="modal-content modal-small">
+      <div class="modal-header">
+        <h3 id="modalTitle">Confirmar Acción</h3>
+      </div>
+      <p id="modalMessage">¿Estás seguro de realizar esta acción?</p>
+      <div class="modal-actions">
+        <button type="button" class="btn btn-cancel" id="btnCancelar">Cancelar</button>
+        <button type="button" class="btn btn-danger" id="btnConfirmar">Confirmar</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="{% static '/habilidades.js' %}"></script>
 </body>
+
 </html>

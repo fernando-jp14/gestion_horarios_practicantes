@@ -1,4 +1,4 @@
-env/
+venv/
 # Ignorar temporalmente el workflow de test
 .github/workflows/test.yml
 
@@ -6,3 +6,5 @@ __pycache__/
 migrations/
 .env
 prueba/
+env/
+endpoints.md

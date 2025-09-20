@@ -8,43 +8,44 @@ class HabilidadSimpleSerializer(serializers.ModelSerializer):
         model = Habilidad
         fields = ['nombre']
 
-
-
-
 class NivelHabilidadSerializer(serializers.ModelSerializer):
     # Para escritura: ids de practicante y habilidad
     practicante = serializers.PrimaryKeyRelatedField(queryset=Practicante.objects.all(), write_only=True, required=True)
     habilidad = serializers.PrimaryKeyRelatedField(queryset=Habilidad.objects.all(), write_only=True, required=True)
 
-    # Para lectura: nombres legibles
-    id_practicante = serializers.SerializerMethodField(read_only=True)
-    nombre_practicante = serializers.SerializerMethodField(read_only=True)
+    # Para lectura personalizada
+    id_habilidad = serializers.IntegerField(source='habilidad.id', read_only=True)
     nombre_habilidad = serializers.CharField(source='habilidad.nombre', read_only=True)
 
     class Meta:
         model = NivelHabilidad
         fields = [
-            'id',
-            'practicante',        # Para POST/PUT (id)
-            'habilidad',          # Para POST/PUT (id)
+            'id_habilidad',
             'puntaje',
-            'id_practicante',     # Solo lectura
-            'nombre_practicante', # Solo lectura
-            'nombre_habilidad',   # Solo lectura
+            'nombre_habilidad',
+            'practicante',  # Para POST/PUT
+            'habilidad',    # Para POST/PUT
         ]
 
-    def get_id_practicante(self, obj):
-        return obj.practicante.id if obj.practicante else None
-
-    def get_nombre_practicante(self, obj):
-        if obj.practicante:
-            return f"{obj.practicante.nombre} {obj.practicante.apellido}"
-        return None
+    # Ocultar practicante y habilidad en la respuesta GET (solo para escritura)
+    def to_representation(self, instance):
+        rep = super().to_representation(instance)
+        rep.pop('practicante', None)
+        rep.pop('habilidad', None)
+        return rep
 
 
 class PracticantePuntajeSerializer(serializers.ModelSerializer):
     niveles_habilidad = NivelHabilidadSerializer(many=True, read_only=True)
 
+    id_practicante = serializers.IntegerField(source='id', read_only=True)
+    nombre_practicante = serializers.SerializerMethodField(read_only=True)
+
     class Meta:
         model = Practicante
-        fields = ['id', 'nombre', 'niveles_habilidad']
+        fields = ['id_practicante', 'nombre_practicante', 'niveles_habilidad']
+
+    def get_nombre_practicante(self, obj):
+        return f"{obj.nombre} {obj.apellido}".strip()
+
+
