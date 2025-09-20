@@ -5,19 +5,13 @@ from .models import Habilidad, NivelHabilidad
 from .serializers import HabilidadSimpleSerializer, NivelHabilidadSerializer, PracticantePuntajeSerializer
 from Practicantes.models import Practicante
 from django.shortcuts import render
-<<<<<<< HEAD
-
-class PracticanteViewSet(viewsets.ModelViewSet):
-    queryset = Practicante.objects.all()
-    serializer_class = PracticantePuntajeSerializer
-
-=======
 from .utils import export_niveles_habilidad_to_excel
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import action, permission_classes
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.decorators import action
+
 
 class PracticantePuntajeViewSet(viewsets.ModelViewSet):
 
@@ -111,7 +105,6 @@ class PracticantePuntajeViewSet(viewsets.ModelViewSet):
         borrados, _ = NivelHabilidad.objects.filter(practicante=practicante).delete()
         return Response({'detail': f'Se eliminaron {borrados} puntajes de habilidad.'}, status=status.HTTP_204_NO_CONTENT)
 
->>>>>>> 6e2429c3f6d1121f26a8c8f60a6056f5eb051b89
 
 class HabilidadViewSet(viewsets.ModelViewSet):
     queryset = Habilidad.objects.all()
