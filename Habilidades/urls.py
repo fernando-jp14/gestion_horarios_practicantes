@@ -13,4 +13,5 @@ urlpatterns = [
 ]
 
 # Probar exportación a Excel
+#poner como un boton en el  habilidades.html para que se descargue el archivo (funciona ya lo probé)
 # http://localhost:8000/api/niveles-habilidad/exportar-excel/

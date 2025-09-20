@@ -11,4 +11,5 @@ urlpatterns = [
 ]
 
 # Probar exportación a Excel
+#poner como un boton en el  horarios.html para que se descargue el archivo(funciona ya lo probé)
 # http://localhost:8000/api/horarios-recuperacion/exportar-excel/
