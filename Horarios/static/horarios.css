@@ -159,6 +159,27 @@ body {
   opacity: 0.9;
   transform: translateY(-2px);
 }
+/* Botón flotante en la esquina inferior derecha */
+.btn-float {
+  position: fixed;
+  bottom: 20px;   
+  right: 20px;   
+  background-color: #6366f1; 
+  color: white;
+  padding: 12px 20px;
+  border-radius: 8px;
+  font-weight: bold;
+  text-decoration: none;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+
+
+.btn-float:hover {
+  background-color: #4f46e5; 
+  transform: translateY(-2px);
+}
+
 
 /* Horarios container */
 .horarios-container {

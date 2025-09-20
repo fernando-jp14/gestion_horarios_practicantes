@@ -56,7 +56,8 @@
             <button class="btn-primary" id="addHorarioBtn">
               + Añadir Horario
             </button>
-          </div>
+            
+            </div>
 
           <!-- Modal para añadir/editar horario -->
           <div id="horarioModal" class="modal">
@@ -182,9 +183,12 @@
             <div id="errorMessage" class="error" style="display: none"></div>
           </div>
         </div>
-      </main>
-    </div>
+      </main>   <!-- Botón flotante -->
+       <a href="/api/niveles-habilidad/exportar-excel/" class="btn-float">
+         📤 Exportar Excel
+       </a>
 
+            
     <script src="{% static 'horarios.js' %}"></script>
   </body>
 </html>

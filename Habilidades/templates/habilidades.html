@@ -33,6 +33,8 @@
     <div class="container">
       <header class="header">
         <h1>Gestión de Habilidades</h1>
+        
+  
         <div class="header-actions">
           <!-- Panel de usuario -->
           <div class="user-panel">
@@ -41,7 +43,7 @@
               <span class="user-name" id="userName">Cargando...</span>
             </button>
             <button class="logout-btn" id="logoutBtn" title="Cerrar sesión">
-              <span>🚪</span>
+              <span>Cerrar sesión</span>
             </button>
 
             <!-- Mini panel de usuario -->
@@ -103,6 +105,11 @@
         <h3>Selecciona un practicante</h3>
         <p>Elige un practicante de la lista para gestionar sus habilidades</p>
       </div>
+       <!-- Botón nuevo -->
+         <!-- Botón flotante -->
+       <a href="/api/niveles-habilidad/exportar-excel/" class="btn-float">
+         📤 Exportar Excel
+       </a>
 
       <!-- Loading -->
       <div id="loading" class="loading" style="display: none;">

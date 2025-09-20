@@ -348,6 +348,26 @@ body {
     opacity: 0.6;
     cursor: not-allowed;
 }
+.btn-float {
+  position: fixed;
+  bottom: 20px;   /* margen desde abajo */
+  right: 20px;    /* margen desde la derecha */
+  background: linear-gradient(90deg, #a18fff 0%, #6f6fff 100%);
+  color: white;
+  padding: 0.8rem 1.5rem;
+  border-radius: 6px;
+  font-weight: 500;
+  text-decoration: none;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  transition: all 0.2s;
+  z-index: 1000; /* siempre visible por encima */
+}
+
+.btn-float:hover {
+  opacity: 0.9;
+  transform: translateY(-3px);
+}
+
 
 /* Notificaciones */
 .notifications {
