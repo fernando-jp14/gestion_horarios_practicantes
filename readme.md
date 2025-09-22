@@ -65,3 +65,77 @@ El objetivo es optimizar el control de asistencia y disponibilidad de los practi
  ┣ 📄 manage.py            # Comando principal de Django
  ┣ 📄 requirements.txt     # Dependencias del proyecto
  ┗ 📄 README.md            # Documentación del proyecto
+
+## 📌 Historias de Usuario Implementadas (Sprint 1)
+
+1️⃣ **HU01:** Creación del repositorio en GitHub.  
+2️⃣ **HU02:** CRUD de practicantes.  
+3️⃣ **HU03:** Asignación y visualización de horarios.  
+
+---
+
+## 🚀 Cómo Ejecutar el Proyecto
+
+### 🔹 Requisitos Previos
+- Tener **Python 3.10+** instalado.  
+- Tener **pip** para instalar dependencias.  
+- Tener **Git** para clonar el repositorio.  
+
+### 🔹 Pasos
+1. **Clonar este repositorio:**
+```bash
+git clone https://github.com/usuario/gestion-horarios-practicantes.git
+Entrar a la carpeta del proyecto:
+
+bash
+Copiar código
+cd gestion-horarios-practicantes
+Instalar dependencias:
+
+bash
+Copiar código
+pip install -r requirements.txt
+Ejecutar migraciones:
+
+bash
+Copiar código
+python manage.py migrate
+Iniciar servidor de desarrollo:
+
+bash
+Copiar código
+python manage.py runserver
+Abrir en el navegador:
+
+cpp
+Copiar código
+http://127.0.0.1:8000
+🧪 Cómo Probar el Sistema
+✅ Registrar un nuevo practicante y verificar que aparece en el listado.
+
+✅ Editar datos de un practicante y comprobar que los cambios se actualizan.
+
+✅ Eliminar un practicante y confirmar que ya no está en la lista.
+
+✅ Asignar horarios y verificar que no existan solapamientos.
+
+📊 Sprint Review (Resumen del Sprint 1)
+✅ Repositorio creado y configurado en GitHub.
+
+✅ CRUD de practicantes implementado con validaciones.
+
+✅ Asignación de horarios funcional.
+
+✅ Documentación inicial lista.
+
+📌 Próximos Pasos (Sprint 2)
+🔹 Implementar gestión de habilidades asociadas a practicantes.
+
+🔹 Agregar autenticación de usuarios (login/admin).
+
+🔹 Mejorar diseño visual de la interfaz.
+
+🔹 Agregar exportación de horarios (PDF/Excel).
+
+📄 Licencia
+Este proyecto es de uso académico y fue desarrollado por el Grupo 2 como parte de un trabajo colaborativo usando Scrum.
