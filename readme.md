@@ -66,6 +66,7 @@ El objetivo es optimizar el control de asistencia y disponibilidad de los practi
  ┣ 📄 requirements.txt     # Dependencias del proyecto
  ┗ 📄 README.md            # Documentación del proyecto
 
+---
 
 ## 📌 Historias de Usuario Implementadas (Sprint 1)
 
