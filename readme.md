@@ -80,6 +80,8 @@ El objetivo es optimizar el control de asistencia y disponibilidad de los practi
 - Tener **pip** para instalar dependencias.  
 - Tener **Git** para clonar el repositorio.  
 
+---
+
 🚀 Pasos para Ejecutar el Proyecto
 
 1️⃣ Clonar este repositorio
@@ -100,12 +102,16 @@ python manage.py runserver
 6️⃣ Abrir en el navegador
 http://127.0.0.1:8000
 
+---
+
 🧪 Cómo Probar el Sistema
 
 ✅ Registrar un nuevo practicante y verificar que aparece en el listado.
 ✅ Editar datos de un practicante y comprobar que los cambios se actualizan.
 ✅ Eliminar un practicante y confirmar que ya no está en la lista.
 ✅ Asignar horarios y verificar que no existan solapamientos.
+
+---
 
 📊 Sprint Review (Resumen del Sprint 1)
 
@@ -114,12 +120,16 @@ http://127.0.0.1:8000
 ✅ Asignación de horarios funcional.
 ✅ Documentación inicial lista.
 
+---
+
 📌 Próximos Pasos (Sprint 2)
 
 🔹 Implementar gestión de habilidades asociadas a practicantes.
 🔹 Agregar autenticación de usuarios (login/admin).
 🔹 Mejorar diseño visual de la interfaz.
 🔹 Agregar exportación de horarios (PDF/Excel).
+
+---
 
 📄 Licencia
 
