@@ -20,6 +20,9 @@ class HorarioRecuperacionSerializer(serializers.ModelSerializer):
                 dias_no_permitidos.append(dia.nombre)
         if dias_no_permitidos:
             raise serializers.ValidationError(f"Día(s) no permitido(s) en faltas: {', '.join(dias_no_permitidos)}. Solo se permite de lunes a viernes.")
+        # Solo permitir un día seleccionado
+        if len(value) != 1:
+            raise serializers.ValidationError("Debes seleccionar exactamente un día de falta.")
         return value
     # Validación para asegurar que un practicante solo tenga un horario
     def validate_practicante(self, value):
@@ -59,18 +62,24 @@ class HorarioRecuperacionSerializer(serializers.ModelSerializer):
         queryset=Dia.objects.all(), many=True, write_only=True, help_text="IDs de días de recuperación"
     )
 
+    def validate_dias_recuperacion(self, value):
+        # Solo permitir un día seleccionado
+        if len(value) != 1:
+            raise serializers.ValidationError("Debes seleccionar exactamente un día de recuperación.")
+        return value
+
     class Meta:
         model = HorarioRecuperacion
         # Incluye los campos de solo lectura y los de escritura
         fields = [
             'id',
-            'practicante',        # Para POST/PUT (id)
-            'dias_falta',         # Para POST/PUT (ids)
-            'dias_recuperacion',  # Para POST/PUT (ids)
-            'dias_falta_detalle', # Solo lectura (detalle)
-            'dias_recuperacion_detalle', # Solo lectura (detalle)
-            'id_practicante',     # Solo lectura (id)
-            'nombre_practicante', # Solo lectura (nombre y apellido)
+            'practicante',        
+            'dias_falta',         
+            'dias_recuperacion',  
+            'dias_falta_detalle', 
+            'dias_recuperacion_detalle', 
+            'id_practicante',     
+            'nombre_practicante', 
         ]
 
     def get_id_practicante(self, obj):
