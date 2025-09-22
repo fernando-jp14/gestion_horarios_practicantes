@@ -52,19 +52,16 @@ El objetivo es optimizar el control de asistencia y disponibilidad de los practi
 ✔ **Documentador:** Redacta HU, checklist y documentación del proyecto.  
 
 ---
-
-## 📂 **Estructura del Proyecto**  
-
-```plaintext
-📂 gestion_horarios_practicantes/
- ┣ 📂 Habilidades/          # Módulo para gestionar habilidades de practicantes
- ┣ 📂 Horarios/            # Módulo principal para gestionar los horarios
- ┣ 📂 Practicantes/        # CRUD de practicantes
- ┣ 📂 templates/           # Plantillas HTML
- ┣ 📂 static/              # Archivos CSS y JS
- ┣ 📄 manage.py            # Comando principal de Django
- ┣ 📄 requirements.txt     # Dependencias del proyecto
- ┗ 📄 README.md            # Documentación del proyecto
+## 📂 Estructura del Proyecto
+📂 **gestion_horarios_practicantes/**  
+ ┣ 📂 **Habilidades/**          # Módulo para gestionar habilidades de practicantes  
+ ┣ 📂 **Horarios/**            # Módulo principal para gestionar los horarios  
+ ┣ 📂 **Practicantes/**        # CRUD de practicantes  
+ ┣ 📂 **templates/**           # Plantillas HTML  
+ ┣ 📂 **static/**              # Archivos CSS y JS  
+ ┣ 📄 **manage.py**            # Comando principal de Django  
+ ┣ 📄 **requirements.txt**     # Dependencias del proyecto  
+ ┗ 📄 **README.md**            # Documentación del proyecto  
 
 ---
 
@@ -84,7 +81,22 @@ El objetivo es optimizar el control de asistencia y disponibilidad de los practi
 - Tener **Git** para clonar el repositorio.  
 
 ### 🔹 Pasos
-1. **Clonar este repositorio:**
 ```bash
+# 1️⃣ Clonar este repositorio
 git clone https://github.com/usuario/gestion-horarios-practicantes.git
+
+# 2️⃣ Entrar a la carpeta del proyecto
+cd gestion-horarios-practicantes
+
+# 3️⃣ Instalar dependencias
+pip install -r requirements.txt
+
+# 4️⃣ Ejecutar migraciones
+python manage.py migrate
+
+# 5️⃣ Iniciar servidor de desarrollo
+python manage.py runserver
+
+# 6️⃣ Abrir en el navegador
+http://127.0.0.1:8000
 
