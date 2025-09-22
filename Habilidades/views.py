@@ -16,24 +16,7 @@ class PracticantePuntajeViewSet(viewsets.ModelViewSet):
 
     @action(detail=False, methods=['post', 'put'], url_path='asignar_puntajes')
     def asignar_puntajes(self, request):
-        """
-        Asigna puntajes a un practicante existente, buscando por id o por nombre y apellido exactos.
-        Solo permite habilidades ya existentes (no crea nuevas).
-        JSON ejemplo:
-        {
-          "id_practicante": 3,
-          "puntajes": [
-            {"nombre_habilidad": "React", "puntaje": 3},
-            {"nombre_habilidad": "JavaScript", "puntaje": 1}
-          ]
-        }
-        o
-        {
-          "nombre": "Jorge",
-          "apellido": "Huilca",
-          "puntajes": [ ... ]
-        }
-        """
+    
         id_practicante = request.data.get('id_practicante')
         nombre = request.data.get('nombre')
         apellido = request.data.get('apellido')
